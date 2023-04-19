@@ -1,0 +1,11 @@
+{
+  "name": "react-flowstate",
+  "version": "1.0.0",
+  "description": "Get rid of useEffect, useState for data fetching and loading indicator.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hao Tang",
+  "license": "MIT"
+}
