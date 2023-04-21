@@ -15,10 +15,17 @@ export interface DataLayoutHelpers {
   reload: () => void;
 }
 
+export type DataLayoutState<Data> = {
+  data: Data,
+  isLoading: boolean,
+}
+
 /**
  * State, handlers, and helpers for all components under <DataLayout />.
  */
-export type DataLayoutProps<Values> = DataLayoutHelpers;
+export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
+
+export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
 /**
  * <DataLayout /> props

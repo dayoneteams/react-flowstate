@@ -3,16 +3,23 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DataLayout } from '../.';
 
+const MOCKED_DATA = {
+  countries: ['Viet Nam', 'US', 'China'],
+  languages: ['vi-VN', 'en-US', 'en-UK'],
+};
+interface DataResponseType {
+  countries: string[];
+  languages: string[];
+}
 const App = () => {
-  const fetchData =
-    () => new Promise((resolve) => setTimeout(() => resolve({
-      countries: ['Viet Nam', 'US', 'China'],
-      languages: ['vi-VN', 'en-US', 'en-UK'],
-    }), 2000));
+  const fetchData = () =>
+    new Promise<DataResponseType>(resolve =>
+      setTimeout(() => resolve(MOCKED_DATA), 1000)
+    );
 
   return (
     <DataLayout fetchFn={fetchData}>
-      {({countries, languages}) => (
+      {({ data: { countries, languages }, reload }) => (
         <div>
           <h1>Countries</h1>
           {countries.map((country, index) => (
@@ -22,7 +29,7 @@ const App = () => {
           {languages.map((language, index) => (
             <div key={index}>{language}</div>
           ))}
-          {/*<button onClick={helpers.reload}>Reload</button>*/}
+          <button onClick={reload}>Reload</button>
         </div>
       )}
     </DataLayout>
