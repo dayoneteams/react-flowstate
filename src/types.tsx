@@ -16,9 +16,9 @@ export interface DataLayoutHelpers {
 }
 
 export type DataLayoutState<Data> = {
-  data: Data,
-  isLoading: boolean,
-}
+  data: Data;
+  isLoading: boolean;
+};
 
 /**
  * State, handlers, and helpers for all components under <DataLayout />.
