@@ -1,12 +1,20 @@
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useState
+} from 'react';
 
+// type Helpers = {
+//   reload: () => Promise<void>;
+// }
 type Props<D> = {
-  children: (data: D) => ReactNode;
+  children: (data?: D) => ReactNode;
   refresh?: (method: { refetchData: () => void }) => void;
   fetchFn: () => D | Promise<D>;
 };
 export const DataLayoutCtx = createContext<{ data?: any }>({});
-export const DataLayout = <D,>({ fetchFn, refresh }: Props<D>) => {
+export const DataLayout = <D,>({ fetchFn, refresh, children }: Props<D>) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<D>();
 
@@ -24,11 +32,16 @@ export const DataLayout = <D,>({ fetchFn, refresh }: Props<D>) => {
     refresh({ refetchData: findData });
   }
 
-  // const renderChildren = useCallback(() => children(data), [data, children]);
+  // const helpers: Helpers = {
+  //   reload: async () => {
+  //     setLoading(true);
+  //     await findData();
+  //   }
+  // };
 
   return (
     <DataLayoutCtx.Provider value={{ data }}>
-      {loading ? <div>Loading ...</div> : <div>Loaded</div>}
+      {loading ? <div>Loading ...</div> : children(data)}
     </DataLayoutCtx.Provider>
   );
 };
