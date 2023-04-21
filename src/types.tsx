@@ -27,6 +27,10 @@ export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
 
 export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
+export type DataLayoutRenderFunction<Data> = (
+  props: DataLayoutProps<Data>
+) => React.ReactNode;
+
 /**
  * <DataLayout /> props
  */
@@ -39,9 +43,7 @@ export interface DataLayoutConfig<Data> {
   /**
    * React children or child render callback
    */
-  children?:
-    | ((props: DataLayoutProps<Data>) => React.ReactNode)
-    | React.ReactNode;
+  children?: DataLayoutRenderFunction<Data> | React.ReactNode;
 
   /**
    * Function that fetch data

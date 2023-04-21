@@ -1,11 +1,17 @@
 import React, { Reducer, useCallback, useEffect, useReducer } from 'react';
-import { DataLayoutConfig, DataLayoutState, ResponseData } from './types';
+import {
+  DataLayoutConfig,
+  DataLayoutRenderFunction,
+  DataLayoutState,
+  ResponseData,
+} from './types';
 import { isFunction } from './utils';
 import { DataLayoutProvider } from './DataLayoutContext';
 
 type DataLayoutAction<Values> =
   | { type: 'LOAD_START' }
-  | { type: 'LOAD_SUCCESS'; payload: Values };
+  | { type: 'LOAD_SUCCESS'; payload: Values }
+  | { type: 'SET_LOADING'; payload: boolean };
 
 function dataLayoutReducer<Values>(
   state: DataLayoutState<Values>,
@@ -23,6 +29,11 @@ function dataLayoutReducer<Values>(
         isLoading: false,
         data: action.payload,
       };
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
     default:
       return state;
   }
@@ -38,8 +49,6 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     isLoading: true,
   });
 
-  console.log(state);
-
   const loadData = useCallback(async () => {
     dispatch({ type: 'LOAD_START' });
     const fetchedData = await fetchFn();
@@ -50,6 +59,13 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     loadData();
   }, [loadData]);
 
+  const setLoading = useCallback(
+    (isLoading: boolean) => {
+      dispatch({ type: 'SET_LOADING', payload: isLoading });
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -58,9 +74,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     data: state.data,
     isLoading: state.isLoading,
     reload,
-    setLoading: (isLoading: boolean) => {
-      console.log(isLoading);
-    },
+    setLoading,
   };
 
   return context;
@@ -71,15 +85,14 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
 ) {
   const contextValue = useDataLayout<Data>(props);
 
-  // TODO
-  const children = props.children as Function;
+  const children = props.children;
 
   return (
     <DataLayoutProvider value={contextValue}>
       {contextValue.isLoading
         ? 'Loading 3 ...' // TODO: Loading component
         : isFunction(children)
-        ? children(contextValue)
+        ? (children as DataLayoutRenderFunction<Data>)(contextValue)
         : React.Children.only(children)}
     </DataLayoutProvider>
   );
