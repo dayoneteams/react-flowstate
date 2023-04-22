@@ -1,0 +1,35 @@
+.card {
+  background-color: hotpink;
+  padding: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 24px;
+}
+
+.loading-indicator {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reload-button-container {
+  text-align: center;
+}
+
+.reload-button {
+  padding: 32px;
+  background-color: hotpink;
+  font-size: 24px;
+  border-radius: 4px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+.reload-button:hover {
+  color: white;
+}
