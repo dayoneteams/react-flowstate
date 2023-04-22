@@ -35,6 +35,8 @@ export type DataLayoutRenderFunction<Data> = (
  * <DataLayout /> props
  */
 export interface DataLayoutConfig<Data> {
+  // initialData?: Data, // TODO: To be supported
+
   /**
    * UI component to render
    */
@@ -50,3 +52,5 @@ export interface DataLayoutConfig<Data> {
    */
   fetchFn: () => Promise<Data>;
 }
+
+export type DataProvider<Data> = (agrs: unknown) => Promise<Data>
