@@ -3,38 +3,34 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {fetchData} from './data';
 import {DataLayout} from '../.';
-import "./style.css";
+// import "./style.css";
 
 const App = () => {
   return (
-    <div>
-      <h1><center>Awesome React Libraries</center></h1>
-      <h3><center>Appreciate the Great Works</center></h3>
+    <div className="container mx-auto px-4">
+      <h1 className="text-3xl text-center">Awesome React Libraries</h1>
+      <h3 className="text-1xl text-center mb-5">Appreciate the Great Works</h3>
       <DataLayout
         fetchFn={fetchData}
         loadingIndicator={() => <div className="loading-indicator">Wait me a sec ...</div>}
       >
         {({ data , reload, isLoadingInShadow }) => (
-          <div className="container">
-            <div className="card-list">
+          <div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
               {data.map((member, index) => (
-                <div key={index} className="card">
+                <div className="card bg-green-100 shadow-xl" key={index}>
                   <div className="card-body">
-                    <div className="card-title">{member.name}</div>
-                    <div>{member.description}</div>
-                    <div>
-                      <a href={member.websiteUrl} target="_blank">
-                        {member.websiteUrl}
-                      </a>
-                    </div>
+                    <h2 className="card-title">{member.name}</h2>
+                    <p>{member.description}</p>
+                    <a className="link link-secondary" href={member.websiteUrl} target="_blank">{member.websiteUrl}</a>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="reload-button-container">
-              <button onClick={() => reload()} className="reload-button">Reload</button>
+            <div className="mt-5 flex justify-center">
+              <button onClick={() => reload()} className="btn btn-secondary">Reload</button>
               &nbsp;
-              <button onClick={() => reload({shadow: true})} className="reload-button">
+              <button onClick={() => reload({shadow: true})} className="btn btn-secondary">
                 {isLoadingInShadow ? 'Reloading ...' : 'Shadow Reload'}
               </button>
             </div>

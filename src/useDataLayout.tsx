@@ -8,7 +8,7 @@ import {
 
 type DataLayoutAction<Values> =
   | { type: 'LOAD_START'; payload: { shadow: boolean } }
-  | { type: 'LOAD_SUCCESS'; payload: Values }
+  | { type: 'LOAD_SUCCESS'; payload: Values };
 
 function dataLayoutReducer<Data>(
   state: DataLayoutState<Data>,
