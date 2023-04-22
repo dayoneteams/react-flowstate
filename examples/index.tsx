@@ -7,27 +7,38 @@ import "./style.css";
 
 const App = () => {
   return (
-    <DataLayout
-      fetchFn={fetchData}
-      loadingIndicator={() => <div className="loading-indicator">Loading ... In Your Area!</div>}
-    >
-      {({ data , reload }) => (
-        <div className="container">
-          <div>
-            {data.map((member, index) => (
-              <div key={index} className="card">
-                <div className="card-title">{member.name}</div>
-                <div>{member.birthYear}</div>
-                <div>{member.position}</div>
-              </div>
-            ))}
+    <div>
+      <h1>Appreciate Great Works from Great Developers</h1>
+      <DataLayout
+        fetchFn={fetchData}
+        loadingIndicator={() => <div className="loading-indicator">Loading...</div>}
+      >
+        {({ data , reload }) => (
+          <div className="container">
+            <div className="card-list">
+              {data.map((member, index) => (
+                <div key={index} className="card">
+                  <div className="card-body">
+                    <div className="card-title">{member.name}</div>
+                    <div>{member.description}</div>
+                    <div>
+                      <a href={member.websiteUrl} target="_blank">
+                        {member.websiteUrl}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="reload-button-container">
+              <button onClick={reload} className="reload-button">Reload</button>
+              &nbsp;
+              <button onClick={reload} className="reload-button">Shadow Reload</button>
+            </div>
           </div>
-          <div className="reload-button-container">
-            <button onClick={reload} className="reload-button">Reload</button>
-          </div>
-        </div>
-      )}
-    </DataLayout>
+        )}
+      </DataLayout>
+    </div>
   );
 };
 
