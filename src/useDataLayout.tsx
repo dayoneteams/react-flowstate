@@ -1,31 +1,33 @@
 import { Reducer, useCallback, useEffect, useReducer } from 'react';
-import { DataLayoutConfig, DataLayoutState, ResponseData } from './types';
+import {
+  DataLayoutConfig,
+  DataLayoutContextType,
+  DataLayoutState,
+  ResponseData,
+} from './types';
 
 type DataLayoutAction<Values> =
-  | { type: 'LOAD_START' }
+  | { type: 'LOAD_START'; payload: { shadow: boolean } }
   | { type: 'LOAD_SUCCESS'; payload: Values }
-  | { type: 'SET_LOADING'; payload: boolean };
 
-function dataLayoutReducer<Values>(
-  state: DataLayoutState<Values>,
-  action: DataLayoutAction<Values>
-): DataLayoutState<Values> {
+function dataLayoutReducer<Data>(
+  state: DataLayoutState<Data>,
+  action: DataLayoutAction<Data>
+): DataLayoutState<Data> {
   switch (action.type) {
     case 'LOAD_START':
       return {
         ...state,
         isLoading: true,
+        isLoadingInShadow: action.payload.shadow,
       };
     case 'LOAD_SUCCESS':
       return {
         ...state,
         isLoading: false,
+        isLoadingInShadow: false,
         data: action.payload,
-      };
-    case 'SET_LOADING':
-      return {
-        ...state,
-        isLoading: action.payload,
+        initialDataLoaded: true,
       };
     default:
       return state;
@@ -38,36 +40,38 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
   >(dataLayoutReducer, {
+    initialDataLoaded: false,
     data: undefined as any,
     isLoading: true,
+    isLoadingInShadow: false, // TODO: How about global config and default config
   });
 
-  const loadData = useCallback(async () => {
-    dispatch({ type: 'LOAD_START' });
-    const fetchedData = await fetchFn();
-    dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
-  }, [fetchFn, dispatch]);
-
-  const reload = useCallback(() => {
-    loadData();
-  }, [loadData]);
-
-  const setLoading = useCallback(
-    (isLoading: boolean) => {
-      dispatch({ type: 'SET_LOADING', payload: isLoading });
+  const loadData = useCallback(
+    async (shadow = false) => {
+      dispatch({ type: 'LOAD_START', payload: { shadow } });
+      const fetchedData = await fetchFn();
+      dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
     },
-    [dispatch]
+    [fetchFn, dispatch]
+  );
+
+  const reload = useCallback(
+    (options?: { shadow: boolean }) => {
+      loadData(options?.shadow);
+    },
+    [loadData]
   );
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
-  const context = {
+  const context: DataLayoutContextType<Data> = {
     data: state.data,
+    initialDataLoaded: state.initialDataLoaded,
     isLoading: state.isLoading,
+    isLoadingInShadow: state.isLoadingInShadow,
     reload,
-    setLoading,
   };
 
   return context;

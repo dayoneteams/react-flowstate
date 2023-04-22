@@ -14,16 +14,27 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
 ) {
   const contextValue = useDataLayout<Data>(props);
   const { children, loadingIndicator } = props;
+  const { isLoading, isLoadingInShadow, initialDataLoaded } = contextValue;
+
+  const renderLoadingIndicator = () =>
+    isFunction(loadingIndicator)
+      ? (loadingIndicator as RenderFunction)()
+      : React.Children.only(loadingIndicator);
+
+  const renderChildren = () =>
+    isFunction(children)
+      ? (children as DataLayoutRenderFunction<Data>)(contextValue)
+      : React.Children.only(children);
 
   return (
     <DataLayoutProvider value={contextValue}>
-      {contextValue.isLoading
-        ? isFunction(loadingIndicator)
-          ? (loadingIndicator as RenderFunction)()
-          : loadingIndicator
-        : isFunction(children)
-        ? (children as DataLayoutRenderFunction<Data>)(contextValue)
-        : React.Children.only(children)}
+      {isLoading &&
+        !isLoadingInShadow &&
+        loadingIndicator &&
+        renderLoadingIndicator()}
+      {(!isLoading || (initialDataLoaded && isLoadingInShadow)) &&
+        children &&
+        renderChildren()}
     </DataLayoutProvider>
   );
 }

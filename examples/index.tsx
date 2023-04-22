@@ -9,12 +9,12 @@ const App = () => {
   return (
     <div>
       <h1><center>Awesome React Libraries</center></h1>
-      <h3><center>Appreciate Great Works</center></h3>
+      <h3><center>Appreciate the Great Works</center></h3>
       <DataLayout
         fetchFn={fetchData}
         loadingIndicator={() => <div className="loading-indicator">Wait me a sec ...</div>}
       >
-        {({ data , reload }) => (
+        {({ data , reload, isLoadingInShadow }) => (
           <div className="container">
             <div className="card-list">
               {data.map((member, index) => (
@@ -32,9 +32,11 @@ const App = () => {
               ))}
             </div>
             <div className="reload-button-container">
-              <button onClick={reload} className="reload-button">Reload</button>
+              <button onClick={() => reload()} className="reload-button">Reload</button>
               &nbsp;
-              <button onClick={reload} className="reload-button">Shadow Reload</button>
+              <button onClick={() => reload({shadow: true})} className="reload-button">
+                {isLoadingInShadow ? 'Reloading ...' : 'Shadow Reload'}
+              </button>
             </div>
           </div>
         )}

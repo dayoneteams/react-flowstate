@@ -9,15 +9,15 @@ export type ResponseData = any;
  * Helpers functions to manually control DataLayout.
  */
 export interface DataLayoutHelpers {
-  /** Manually set isLoading */
-  setLoading: (isLoading: boolean) => void;
   /** Reload layout */
-  reload: () => void;
+  reload: (options?: { shadow: boolean }) => void;
 }
 
 export type DataLayoutState<Data> = {
   data: Data;
+  initialDataLoaded: boolean;
   isLoading: boolean;
+  isLoadingInShadow: boolean;
 };
 
 /**
