@@ -14,11 +14,14 @@ interface DataResponseType {
 const App = () => {
   const fetchData = () =>
     new Promise<DataResponseType>(resolve =>
-      setTimeout(() => resolve(MOCKED_DATA), 1000)
+      setTimeout(() => resolve(MOCKED_DATA), 500)
     );
 
   return (
-    <DataLayout fetchFn={fetchData}>
+    <DataLayout
+      fetchFn={fetchData}
+      loadingIndicator={() => <div>Dang loading day12345</div>}
+    >
       {({ data: { countries, languages }, reload }) => (
         <div>
           <h1>Countries</h1>

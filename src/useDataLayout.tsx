@@ -1,5 +1,5 @@
-import {Reducer, useCallback, useEffect, useReducer} from 'react';
-import {DataLayoutConfig, DataLayoutState, ResponseData,} from './types';
+import { Reducer, useCallback, useEffect, useReducer } from 'react';
+import { DataLayoutConfig, DataLayoutState, ResponseData } from './types';
 
 type DataLayoutAction<Values> =
   | { type: 'LOAD_START' }

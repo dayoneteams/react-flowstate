@@ -27,8 +27,12 @@ export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
 
 export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
-export type DataLayoutRenderFunction<Data> = (
-  props: DataLayoutProps<Data>
+export type DataLayoutRenderFunction<Data> = RenderFunction<
+  DataLayoutProps<Data>
+>;
+
+export type RenderFunction<Props = undefined> = (
+  props?: Props
 ) => React.ReactNode;
 
 /**
@@ -51,6 +55,14 @@ export interface DataLayoutConfig<Data> {
    * Function that fetch data
    */
   fetchFn: () => Promise<Data>;
-}
 
-export type DataProvider<Data> = (agrs: unknown) => Promise<Data>
+  /**
+   * React component to render loading UI
+   */
+  loadingIndicator?: RenderFunction | React.ReactNode;
+
+  /**
+   * React component to render UI displaying error
+   */
+  // errorIndicator?: FunctionComponent; TODO: to be added.
+}
