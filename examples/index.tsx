@@ -1,41 +1,73 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { DataLayout } from '../.';
+import {css, Global} from "@emotion/react";
+import {fetchData} from "./data";
+import {DataLayout} from '../.';
 
-const MOCKED_DATA = {
-  countries: ['Viet Nam', 'US', 'China'],
-  languages: ['vi-VN', 'en-US', 'en-UK'],
-};
-interface DataResponseType {
-  countries: string[];
-  languages: string[];
-}
 const App = () => {
-  const fetchData = () =>
-    new Promise<DataResponseType>(resolve =>
-      setTimeout(() => resolve(MOCKED_DATA), 500)
-    );
-
   return (
-    <DataLayout
-      fetchFn={fetchData}
-      loadingIndicator={() => <div>Dang loading day12345</div>}
-    >
-      {({ data: { countries, languages }, reload }) => (
-        <div>
-          <h1>Countries</h1>
-          {countries.map((country, index) => (
-            <div key={index}>{country}</div>
-          ))}
-          <h1>Languages</h1>
-          {languages.map((language, index) => (
-            <div key={index}>{language}</div>
-          ))}
-          <button onClick={reload}>Reload</button>
-        </div>
-      )}
-    </DataLayout>
+    <div>
+      <Global
+        styles={css`
+        .card {
+          background-color: hotpink;
+          padding: 16px;
+          margin-top: 16px;
+          margin-bottom: 16px;
+        }
+        
+        .card-title {
+          font-size: 24px;
+        }
+        
+        .loading-indicator {
+          padding-top: 24px;
+          padding-bottom: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .reload-button-container {
+          text-align: center;
+        }
+        
+        .reload-button {
+          padding: 32px;
+          background-color: hotpink;
+          font-size: 24px;
+          border-radius: 4px;
+          color: black;
+          font-weight: bold;
+          cursor: pointer;
+          &:hover {
+            color: white;
+          }
+        }
+      `}/>
+      <DataLayout
+        fetchFn={fetchData}
+        loadingIndicator={() => <div className="loading-indicator">Loading ... In Your Area!</div>}
+      >
+        {({ data , reload }) => (
+          <div className="container">
+            <div>
+              {data.map((member, index) => (
+                <div key={index} className="card">
+                  <div className="card-title">{member.name}</div>
+                  <div>{member.birthYear}</div>
+                  <div>{member.position}</div>
+                </div>
+              ))}
+            </div>
+            <div className="reload-button-container">
+              <button onClick={reload} className="reload-button">Reload</button>
+            </div>
+          </div>
+        )}
+      </DataLayout>
+    </div>
   );
 };
 
