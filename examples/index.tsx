@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {fetchData} from './data';
 import {DataLayout} from '../.';
-// import "./style.css";
 
 const App = () => {
   return (
@@ -12,7 +11,11 @@ const App = () => {
       <h3 className="text-1xl text-center mb-5">Appreciate the Great Works</h3>
       <DataLayout
         fetchFn={fetchData}
-        loadingIndicator={() => <div className="loading-indicator">Wait me a sec ...</div>}
+        loadingIndicator={() =>
+          <div className="text-center">
+            <progress className="progress progress-accent w-56" />
+            <div>Wait me a sec ...</div>
+          </div>}
       >
         {({ data , reload, isLoadingInShadow }) => (
           <div>

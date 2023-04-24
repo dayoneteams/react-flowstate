@@ -1,7 +1,7 @@
 import * as lodashSampleSize from 'lodash.samplesize';
 
 const SIZE = 4;
-const DELAY = 500;
+const DELAY = 2000;
 
 const REACT_LIBRARIES = [
     {
