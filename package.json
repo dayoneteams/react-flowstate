@@ -17,11 +17,12 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint src examples",
-    "lint:fix": "tsdx lint --fix src examples",
+    "lint": "tsdx lint src app",
+    "lint:fix": "tsdx lint --fix src app",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "app": "npm i -C ./app && npm run -C ./app start"
   },
   "peerDependencies": {
     "react": ">=16"
