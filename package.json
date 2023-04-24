@@ -12,13 +12,11 @@
   },
   "license": "MIT",
   "main": "dist/index.js",
+  "module": "dist/react-flowstate.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
@@ -44,7 +42,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "module": "dist/react-flowstate.esm.js",
   "size-limit": [
     {
       "path": "dist/react-flowstate.cjs.production.min.js",
