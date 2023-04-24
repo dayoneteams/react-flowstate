@@ -1,5 +1,0 @@
-{
-  "sandboxes": ["react-flowstate"],
-  "buildCommand": "build",
-  "packages": ["packages/react-flowstate"]
-}
