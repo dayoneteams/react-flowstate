@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   DataLayoutConfig,
   DataLayoutRenderFunction,
@@ -16,15 +16,15 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
   const { children, loadingIndicator } = props;
   const { isLoading, isLoadingInShadow, initialDataLoaded } = contextValue;
 
-  const renderLoadingIndicator = () =>
+  const renderLoadingIndicator = useCallback(() =>
     isFunction(loadingIndicator)
       ? (loadingIndicator as RenderFunction)()
-      : React.Children.only(loadingIndicator);
+      : React.Children.only(loadingIndicator), [loadingIndicator]);
 
-  const renderChildren = () =>
+  const renderChildren = useCallback(() =>
     isFunction(children)
       ? (children as DataLayoutRenderFunction<Data>)(contextValue)
-      : React.Children.only(children);
+      : React.Children.only(children), [contextValue, children]);
 
   return (
     <DataLayoutProvider value={contextValue}>

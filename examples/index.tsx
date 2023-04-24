@@ -18,7 +18,7 @@ const App = () => {
           </div>
         )}
       >
-        {({ data, reload, isLoadingInShadow }) => (
+        {({ data, reload, isLoading }) => (
           <div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
               {data.map((member, index) => (
@@ -45,9 +45,10 @@ const App = () => {
               &nbsp;
               <button
                 onClick={() => reload({ shadow: true })}
+                disabled={isLoading}
                 className="btn btn-secondary"
               >
-                {isLoadingInShadow ? 'Reloading ...' : 'Shadow Reload'}
+                {isLoading ? 'Reloading ...' : 'Shadow Reload'}
               </button>
             </div>
           </div>
