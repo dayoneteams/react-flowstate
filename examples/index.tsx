@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { fetchData } from './data';
+import { fetchDataRandomError } from './data';
 import { DataLayout } from '../.';
 
 const App = () => {
@@ -10,11 +10,28 @@ const App = () => {
       <h1 className="text-3xl text-center">Awesome React Libraries</h1>
       <h3 className="text-1xl text-center mb-5">Appreciate the Great Works</h3>
       <DataLayout
-        fetchFn={fetchData}
+        fetchFn={fetchDataRandomError}
         loadingIndicator={() => (
           <div className="text-center">
             <progress className="progress progress-accent w-56" />
             <div>Wait me a sec ...</div>
+          </div>
+        )}
+        errorFallback={(err, { reload, isLoading }) => (
+          <div className="text-center">
+            <span className="text-5xl" role="img" aria-label="cry on error">
+              🥵
+            </span>
+            <div className="text-red-500 mt-1">{err.message}</div>
+            <div className="mt-5 flex justify-center">
+              <button
+                onClick={() => reload()}
+                className="btn btn-primary btn-sm"
+                disabled={isLoading}
+              >
+                Reload
+              </button>
+            </div>
           </div>
         )}
       >
@@ -39,7 +56,11 @@ const App = () => {
               ))}
             </div>
             <div className="mt-5 flex justify-center">
-              <button onClick={() => reload()} className="btn btn-primary">
+              <button
+                onClick={() => reload()}
+                className="btn btn-primary"
+                disabled={isLoading}
+              >
                 Reload
               </button>
               &nbsp;
@@ -48,7 +69,7 @@ const App = () => {
                 disabled={isLoading}
                 className="btn btn-secondary"
               >
-                {isLoading ? 'Reloading ...' : 'Shadow Reload'}
+                Shadow Reload
               </button>
             </div>
           </div>

@@ -66,7 +66,23 @@ const REACT_LIBRARIES = [
   },
 ];
 
-export const fetchData = () =>
-  new Promise(resolve =>
-    setTimeout(() => resolve(lodashSampleSize(REACT_LIBRARIES, SIZE)), DELAY)
-  );
+export const fetchDataRandomError = () => {
+  const random = Math.random();
+  if (random < 0.5) {
+    return new Promise(resolve =>
+      setTimeout(() => resolve(lodashSampleSize(REACT_LIBRARIES, SIZE)), DELAY)
+    );
+  } else {
+    return new Promise((resolve, reject) =>
+      setTimeout(
+        () =>
+          reject(
+            new Error(
+              'Something wrong from server side! Please contact the backend developer!'
+            )
+          ),
+        DELAY
+      )
+    );
+  }
+};

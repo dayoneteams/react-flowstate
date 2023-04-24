@@ -18,6 +18,7 @@ export type DataLayoutState<Data> = {
   initialDataLoaded: boolean;
   isLoading: boolean;
   isLoadingInShadow: boolean;
+  error?: Error;
 };
 
 /**
@@ -64,5 +65,7 @@ export interface DataLayoutConfig<Data> {
   /**
    * React component to render UI displaying error
    */
-  // errorIndicator?: FunctionComponent; TODO: to be added.
+  errorFallback?:
+    ((err: Error, state: DataLayoutProps<Data>) => React.ReactNode)
+    | React.ReactNode;
 }
