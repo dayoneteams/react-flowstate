@@ -4,7 +4,7 @@ import { DataLayoutContextType } from './types';
 export const DataLayoutContext = createContext<DataLayoutContextType<any>>(
   undefined as any
 );
-// DataLayoutContext.displayName = 'FormikContext'; // TODO: ???
+// DataLayoutContext.displayName = 'DataLayoutContext'; // TODO: ???
 
 export const DataLayoutProvider = DataLayoutContext.Provider;
 export const DataLayoutConsumer = DataLayoutContext.Consumer;

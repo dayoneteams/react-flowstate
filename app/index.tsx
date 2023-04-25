@@ -2,7 +2,7 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { fetchDataRandomError } from './data';
-import { DataLayout } from '../.';
+import { DataLayout } from 'react-flowstate';
 
 const App = () => {
   return (
