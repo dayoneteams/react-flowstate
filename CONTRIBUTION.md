@@ -1,11 +1,8 @@
 # How to Contribute
 
 ## Prerequisites
-You have Node installed at LTS.
-
-You are familiar with Git.
-
-Development Workflow
+- Node.js (LTS recommended) installed.
+- Git installed.
 
 ## Development
 Clone codebase and install dependencies.
@@ -13,7 +10,7 @@ Clone codebase and install dependencies.
 npm install
 ```
 
-### Developing with live code update
+### Bundling library and run test app server with live code update
 Start build process in watch mode.
 ```
 npm start
