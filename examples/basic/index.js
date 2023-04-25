@@ -12,13 +12,23 @@ const fetchFn = () => new Promise(resolve => setTimeout(() => resolve([
 const Basic = () => (
   <div>
     <h1>Basic Example</h1>
-    <DataLayout fetchFn={fetchFn}>
-      {({data}) => (
-        <ul>
-          {data.map((jsLib, index) => (
-            <li key={index}>{jsLib}</li>
-          ))}
-        </ul>
+    <DataLayout
+      fetchFn={fetchFn}
+      loadingIndicator={() => (
+        <div>Loading...</div>
+      )}
+    >
+      {({data, reload}) => (
+        <div>
+          <ul>
+            {data.map((jsLib, index) => (
+              <li key={index}>{jsLib}</li>
+            ))}
+          </ul>
+          <div>
+            <button onClick={() => reload()}>Reload</button>
+          </div>
+        </div>
       )}
     </DataLayout>
   </div>
