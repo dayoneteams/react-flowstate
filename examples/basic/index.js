@@ -41,7 +41,7 @@ const fetchFn = () =>
 
 const Basic = () => (
   <Container>
-    <Typography variant="h5" textAlign="center" marginBottom={2}>
+    <Typography variant="h4" textAlign="center" marginBottom={2}>
       Basic Example
     </Typography>
     <DataLayout
