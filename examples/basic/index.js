@@ -18,20 +18,14 @@ const fetchFn = () =>
         resolve([
           {
             name: "React Router",
-            description:
-              "A library for building single-page applications with dynamic routing in React.",
             websiteUrl: "https://reactrouter.com/"
           },
           {
             name: "Material-UI",
-            description:
-              "A library of React components that implement Google's Material Design specification, offering pre-designed components for building responsive and customizable UIs.",
             websiteUrl: "https://mui.com/"
           },
           {
             name: "Next.js",
-            description:
-              "A framework for building server-rendered React applications, offering features like automatic code splitting and server-side rendering.",
             websiteUrl: "https://nextjs.org/"
           }
         ]),
@@ -41,7 +35,7 @@ const fetchFn = () =>
 
 const Basic = () => (
   <Container>
-    <Typography variant="h4" textAlign="center" marginBottom={2}>
+    <Typography variant="h5" textAlign="center" marginBottom={2}>
       Basic Example
     </Typography>
     <DataLayout
@@ -62,7 +56,6 @@ const Basic = () => (
                     <Typography variant="h5" component="div">
                       {jsLib.name}
                     </Typography>
-                    <Typography variant="body2">{jsLib.description}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button href={jsLib.websiteUrl} size="small">
