@@ -10,7 +10,7 @@ const App = () => {
       <h1 className="text-3xl text-center">Awesome React Libraries</h1>
       <h3 className="text-1xl text-center mb-5">Appreciate the Great Works</h3>
       <DataLayout
-        fetchFn={fetchDataRandomError}
+        dataSource={fetchDataRandomError}
         loadingIndicator={() => (
           <div className="text-center">
             <progress className="progress progress-accent w-56" />

@@ -55,7 +55,7 @@ export interface DataLayoutConfig<Data> {
   /**
    * Function that fetch data
    */
-  fetchFn: () => Promise<Data>;
+  dataSource: () => Promise<Data>;
 
   /**
    * React component to render loading UI

@@ -39,7 +39,7 @@ const Basic = () => (
       Basic Example
     </Typography>
     <DataLayout
-      fetchFn={fetchFn}
+      dataSource={fetchFn}
       loadingIndicator={() => (
         <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
           <CircularProgress />

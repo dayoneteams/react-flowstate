@@ -45,7 +45,7 @@ function dataLayoutReducer<Data>(
 }
 
 export function useDataLayout<Data extends ResponseData = ResponseData>({
-  fetchFn,
+  dataSource,
 }: DataLayoutConfig<Data>) {
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
@@ -61,14 +61,14 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     async (shadow = false) => {
       try {
         dispatch({ type: 'LOAD_START', payload: { shadow } });
-        const fetchedData = await fetchFn();
+        const fetchedData = await dataSource();
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
         console.log('adsfasdf', err)
         dispatch({ type: 'LOAD_FAILURE', payload: err });
       }
     },
-    [fetchFn, dispatch]
+    [dataSource, dispatch]
   );
 
   const reload = useCallback(
