@@ -1,33 +1,33 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { DataLayout } from "react-flowstate";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { DataLayout } from 'react-flowstate';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 const fetchFn = () =>
-  new Promise((resolve) =>
+  new Promise(resolve =>
     setTimeout(
       () =>
         resolve([
           {
-            name: "React Router",
-            websiteUrl: "https://reactrouter.com/"
+            name: 'React Router',
+            websiteUrl: 'https://reactrouter.com/',
           },
           {
-            name: "Material-UI",
-            websiteUrl: "https://mui.com/"
+            name: 'Material-UI',
+            websiteUrl: 'https://mui.com/',
           },
           {
-            name: "Next.js",
-            websiteUrl: "https://nextjs.org/"
-          }
+            name: 'Next.js',
+            websiteUrl: 'https://nextjs.org/',
+          },
         ]),
       1000
     )
@@ -41,7 +41,7 @@ const Basic = () => (
     <DataLayout
       dataSource={fetchFn}
       loadingIndicator={() => (
-        <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
+        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
           <CircularProgress />
         </Box>
       )}
@@ -66,7 +66,7 @@ const Basic = () => (
               </Grid>
             ))}
           </Grid>
-          <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
+          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
             <Button onClick={() => reload()} variant="contained">
               Reload
             </Button>
@@ -77,4 +77,4 @@ const Basic = () => (
   </Container>
 );
 
-ReactDOM.render(<Basic />, document.getElementById("root"));
+ReactDOM.render(<Basic />, document.getElementById('root'));
