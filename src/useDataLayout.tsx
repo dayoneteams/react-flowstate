@@ -46,6 +46,8 @@ function dataLayoutReducer<Data>(
 
 export function useDataLayout<Data extends ResponseData = ResponseData>({
   dataSource,
+  shadow = false,
+  onError
 }: DataLayoutConfig<Data>) {
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
@@ -54,7 +56,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     data: undefined as any,
     error: null,
     isLoading: true,
-    isLoadingInShadow: false, // TODO: How about global config and default config
+    isLoadingInShadow: shadow,
   });
 
   const loadData = useCallback(
@@ -65,6 +67,9 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
         dispatch({ type: 'LOAD_FAILURE', payload: err });
+        if (onError) {
+          onError(err);
+        }
       }
     },
     [dataSource, dispatch]
@@ -72,7 +77,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
 
   const reload = useCallback(
     (options?: { shadow: boolean }) => {
-      loadData(options?.shadow);
+      loadData(options?.shadow || shadow);
     },
     [loadData]
   );
