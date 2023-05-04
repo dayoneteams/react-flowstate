@@ -21,7 +21,7 @@ function dataLayoutReducer<Data>(
         ...state,
         isLoading: true,
         isLoadingInShadow: action.payload.shadow,
-        error: undefined,
+        error: null,
       };
     case 'LOAD_SUCCESS':
       return {
@@ -30,7 +30,7 @@ function dataLayoutReducer<Data>(
         isLoadingInShadow: false,
         data: action.payload,
         initialDataLoaded: true,
-        error: undefined,
+        error: null,
       };
     case 'LOAD_FAILURE':
       return {
@@ -52,7 +52,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   >(dataLayoutReducer, {
     initialDataLoaded: false,
     data: undefined as any,
-    error: undefined,
+    error: null,
     isLoading: true,
     isLoadingInShadow: false, // TODO: How about global config and default config
   });
@@ -64,7 +64,6 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         const fetchedData = await dataSource();
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
-        console.log('adsfasdf', err)
         dispatch({ type: 'LOAD_FAILURE', payload: err });
       }
     },

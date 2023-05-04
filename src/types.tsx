@@ -18,7 +18,7 @@ export type DataLayoutState<Data> = {
   initialDataLoaded: boolean;
   isLoading: boolean;
   isLoadingInShadow: boolean;
-  error?: Error;
+  error: Error | null;
 };
 
 /**

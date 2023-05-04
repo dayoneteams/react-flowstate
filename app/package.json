@@ -10,7 +10,7 @@
   "dependencies": {
     "lodash.samplesize": "^4.2.0",
     "react-app-polyfill": "^1.0.0",
-    "react-flowstate": "^1.0.1"
+    "react-flowstate": "../"
   },
   "alias": {
     "react": "../node_modules/react",

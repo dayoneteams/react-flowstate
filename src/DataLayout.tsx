@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {
   DataLayoutConfig, DataLayoutProps,
   DataLayoutRenderFunction,
@@ -14,12 +14,24 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
 ) {
   const contextValue = useDataLayout<Data>(props);
   const { children, loadingIndicator, errorFallback } = props;
-  const { isLoading, isLoadingInShadow, initialDataLoaded, error } = contextValue;
+  const { isLoading, isLoadingInShadow, error, data } = contextValue;
+  const {showLoadingIndicator, showDataContent, showErrorFallback} = useMemo(() => {
+    const showLoadingIndicator = isLoading && !isLoadingInShadow;
+    const showErrorFallback = !!error;
+    const showDataContent = data && !error && (!isLoading || isLoadingInShadow);
+    return {
+      showLoadingIndicator,
+      showDataContent,
+      showErrorFallback,
+    }
+  }, [isLoading, isLoadingInShadow, error, data]);
 
-  const renderLoadingIndicator = useCallback(() =>
-    isFunction(loadingIndicator)
+  const renderLoadingIndicator = useCallback(
+    () => loadingIndicator && isFunction(loadingIndicator)
       ? (loadingIndicator as RenderFunction)()
-      : React.Children.only(loadingIndicator), [loadingIndicator]);
+      : React.Children.only(loadingIndicator),
+    [loadingIndicator]
+  );
 
   const renderDataContent = useCallback(() =>
     isFunction(children)
@@ -33,14 +45,9 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
 
   return (
     <DataLayoutProvider value={contextValue}>
-      {isLoading &&
-        !isLoadingInShadow &&
-        loadingIndicator &&
-        renderLoadingIndicator()}
-      {(!error && !isLoading || (initialDataLoaded && isLoadingInShadow)) &&
-        children &&
-        renderDataContent()}
-      {error && renderErrorFallback()}
+      {showLoadingIndicator && renderLoadingIndicator()}
+      {showDataContent && renderDataContent()}
+      {showErrorFallback && renderErrorFallback()}
     </DataLayoutProvider>
   );
 }
