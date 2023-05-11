@@ -14,12 +14,20 @@ export interface DataLayoutHelpers {
 }
 
 export type DataLayoutState<Data> = {
-  data: Data;
-  initialDataLoaded: boolean;
+  data: Data | null;
   isLoading: boolean;
   isLoadingInShadow: boolean;
   error: Error | null;
+  initialDataLoaded: boolean;
 };
+
+/**
+ * Formik computed properties. These are read-only.
+ */
+export interface DataLayoutComputedProps<Data> {
+  /** The initial values of the form */
+  readonly initialData: Data;
+}
 
 /**
  * State, handlers, and helpers for all components under <DataLayout />.
@@ -40,7 +48,7 @@ export type RenderFunction<Props = undefined> = (
  * <DataLayout /> props
  */
 export interface DataLayoutConfig<Data> {
-  // initialData?: Data, // TODO: To be supported
+  initialData?: Data,
 
   /**
    * UI component to render

@@ -2,8 +2,8 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DataLayout } from 'react-flowstate';
-import toastr  from 'toastr';
-import { fetchDataRandomError } from './data';
+import toastr from 'toastr';
+import { fetchDataRandomError, INITIAL_DATA } from './data';
 
 const App = () => {
   return (
@@ -11,6 +11,8 @@ const App = () => {
       <h1 className="text-3xl text-center">Awesome React Libraries</h1>
       <h3 className="text-1xl text-center mb-5">Appreciate the Great Works</h3>
       <DataLayout
+        initialData={INITIAL_DATA}
+        shadow
         dataSource={fetchDataRandomError}
         loadingIndicator={() => (
           <div className="text-center">
@@ -18,7 +20,7 @@ const App = () => {
             <div>Wait me a sec ...</div>
           </div>
         )}
-        onError={(err) => {
+        onError={err => {
           toastr.error(err.message, 'Opps! There is an error.');
         }}
         errorFallback={(err, { reload, isLoading }) => (
@@ -66,14 +68,6 @@ const App = () => {
                 disabled={isLoading}
               >
                 Reload
-              </button>
-              &nbsp;
-              <button
-                onClick={() => reload({ shadow: true })}
-                disabled={isLoading}
-                className="btn btn-secondary"
-              >
-                Shadow Reload
               </button>
             </div>
           </div>

@@ -66,6 +66,8 @@ const REACT_LIBRARIES = [
   },
 ];
 
+export const INITIAL_DATA = lodashSampleSize(REACT_LIBRARIES, SIZE);
+
 export const fetchDataRandomError = () => {
   const random = Math.random();
   if (random < 0.5) {

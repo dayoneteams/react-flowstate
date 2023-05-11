@@ -45,6 +45,7 @@ function dataLayoutReducer<Data>(
 }
 
 export function useDataLayout<Data extends ResponseData = ResponseData>({
+  initialData,
   dataSource,
   shadow = false,
   onError
@@ -52,12 +53,14 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
   >(dataLayoutReducer, {
-    initialDataLoaded: false,
-    data: undefined as any,
+    initialDataLoaded: !!initialData,
+    data: initialData || null,
     error: null,
-    isLoading: true,
-    isLoadingInShadow: shadow,
+    isLoading: !initialData,
+    isLoadingInShadow: !initialData && shadow,
   });
+
+  const {initialDataLoaded, error, isLoading, isLoadingInShadow} = state;
 
   const loadData = useCallback(
     async (shadow = false) => {
@@ -83,15 +86,17 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   );
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    if (!initialDataLoaded) {
+      loadData();
+    }
+  }, [loadData, initialDataLoaded]);
 
   const context: DataLayoutContextType<Data> = {
     data: state.data,
-    error: state.error,
-    initialDataLoaded: state.initialDataLoaded,
-    isLoading: state.isLoading,
-    isLoadingInShadow: state.isLoadingInShadow,
+    error,
+    initialDataLoaded,
+    isLoading,
+    isLoadingInShadow,
     reload,
   };
 
