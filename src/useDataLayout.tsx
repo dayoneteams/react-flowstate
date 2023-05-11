@@ -47,7 +47,7 @@ function dataLayoutReducer<Data>(
 export function useDataLayout<Data extends ResponseData = ResponseData>({
   initialData,
   dataSource,
-  shadow = false,
+  shadowReload = false,
   onError
 }: DataLayoutConfig<Data>) {
   const [state, dispatch] = useReducer<
@@ -57,7 +57,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     data: initialData || null,
     error: null,
     isLoading: !initialData,
-    isLoadingInShadow: !initialData && shadow,
+    isLoadingInShadow: !initialData && shadowReload,
   });
 
   const {initialDataLoaded, error, isLoading, isLoadingInShadow} = state;
@@ -80,7 +80,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
 
   const reload = useCallback(
     (options?: { shadow: boolean }) => {
-      loadData(options?.shadow || shadow);
+      loadData(options?.shadow || shadowReload);
     },
     [loadData]
   );

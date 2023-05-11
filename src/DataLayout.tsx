@@ -13,18 +13,18 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
   props: DataLayoutConfig<Data>
 ) {
   const contextValue = useDataLayout<Data>(props);
-  const { children, loadingIndicator, errorFallback } = props;
-  const { isLoading, isLoadingInShadow, error, data } = contextValue;
+  const { children, loadingIndicator, errorFallback, hideErrorFallbackOnReloadError } = props;
+  const { isLoading, isLoadingInShadow, error, data, initialDataLoaded } = contextValue;
   const {showLoadingIndicator, showDataContent, showErrorFallback} = useMemo(() => {
     const showLoadingIndicator = isLoading && !isLoadingInShadow;
-    const showErrorFallback = !!error;
-    const showDataContent = data && !error && (!isLoading || isLoadingInShadow);
+    const showErrorFallback = error && (!initialDataLoaded || !hideErrorFallbackOnReloadError);
+    const showDataContent = data && !showErrorFallback && !showLoadingIndicator;
     return {
       showLoadingIndicator,
       showDataContent,
       showErrorFallback,
     }
-  }, [isLoading, isLoadingInShadow, error, data]);
+  }, [isLoading, isLoadingInShadow, error, data, hideErrorFallbackOnReloadError]);
 
   const renderLoadingIndicator = useCallback(
     () => loadingIndicator && isFunction(loadingIndicator)

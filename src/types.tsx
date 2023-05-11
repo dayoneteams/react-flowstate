@@ -71,12 +71,18 @@ export interface DataLayoutConfig<Data> {
   loadingIndicator?: RenderFunction | React.ReactNode;
 
   /**
-   * Whether to show loading indicator
+   * Once data has been fetched and displayed.
+   * Whether to show loading indicator when data is reloaded.
    * - true: Show loading indicator on reload
    * - false: Do not show loading indicator on reload
    * @default false
    */
-  shadow?: boolean;
+  shadowReload?: boolean;
+
+  /**
+   * @default false
+   */
+  hideErrorFallbackOnReloadError?: boolean;
 
   /**
    * Callback function on error. Useful for showing toast or alert.
