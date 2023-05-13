@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { DataLayout } from 'react-flowstate';
-import { fetchDataRandomError, INITIAL_DATA } from '../data';
+import { fetchDataRandomError } from '../data';
 
-export const InitialDataExampleSection = () => (
+export const BasicShadowReloadSection = () => (
   <div>
-    <h1 className="text-3xl text-center">Initial data</h1>
-    <h3 className="text-1xl text-center mb-5">Preset data (useful for SSR)</h3>
+    <h1 className="text-3xl text-center">Basic shadow reload</h1>
+    <h3 className="text-1xl text-center mb-5">
+      Loading indicator and error handling
+    </h3>
     <DataLayout
-      initialData={INITIAL_DATA}
       dataSource={fetchDataRandomError}
+      shadowReload
       loadingIndicator={() => (
         <div className="text-center">
           <progress className="progress progress-accent w-56" />

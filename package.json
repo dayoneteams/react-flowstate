@@ -19,14 +19,14 @@
   ],
   "scripts": {
     "start": "tsdx watch",
+    "start:app": "npm i -C ./app && npm run -C ./app start",
     "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
+    "test": "jest",
     "lint": "tsdx lint src app examples",
     "lint:fix": "tsdx lint --fix src app examples",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why",
-    "app": "npm i -C ./app && npm run -C ./app start"
+    "analyze": "size-limit --why"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -53,6 +53,7 @@
     }
   ],
   "devDependencies": {
+    "@jest/globals": "^29.5.0",
     "@size-limit/preset-small-lib": "^8.2.4",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
@@ -60,6 +61,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "size-limit": "^8.2.4",
+    "ts-jest": "^29.1.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4"

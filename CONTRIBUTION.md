@@ -19,7 +19,7 @@ This builds to `/dist` and runs the project in watch mode so any edits you save 
 
 Open another terminal window and run the test app.
 ```
-npm run app
+npm run start:app
 ```
 The default test app imports and live reloads whatever is in `/dist`.
 

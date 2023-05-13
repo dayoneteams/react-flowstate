@@ -1,17 +1,13 @@
 import * as React from 'react';
 import { DataLayout } from 'react-flowstate';
 import toastr from 'toastr';
-import { fetchDataRandomError, INITIAL_DATA } from '../data';
+import { fetchDataRandomError } from '../data';
 
-export const AdvancedErrorHandlingExampleSection = () => (
+export const HideErrorFallbackSection = () => (
   <div>
     <h1 className="text-3xl text-center">Advanced error handling</h1>
-    <h3 className="text-1xl text-center mb-5">
-      Keep current data when reload throws error
-    </h3>
+    <h3 className="text-1xl text-center mb-5">Hide error fallback</h3>
     <DataLayout
-      initialData={INITIAL_DATA}
-      shadowReload
       hideErrorFallbackOnReloadError
       dataSource={fetchDataRandomError}
       loadingIndicator={

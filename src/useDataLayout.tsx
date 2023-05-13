@@ -9,7 +9,7 @@ import {
 type DataLayoutAction<Values> =
   | { type: 'LOAD_START'; payload: { shadow: boolean } }
   | { type: 'LOAD_SUCCESS'; payload: Values }
-  | { type: 'LOAD_FAILURE'; payload: Error };
+  | { type: 'LOAD_FAILURE'; payload: Error | null };
 
 const CLEAR_ERROR = {
   error: null,
@@ -77,9 +77,9 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
         if (onError) {
-          onError(err);
+          onError(err as Error);
         }
-        dispatch({type: 'LOAD_FAILURE', payload: !hideErrorFallbackOnReloadError && err});
+        dispatch({type: 'LOAD_FAILURE', payload: hideErrorFallbackOnReloadError ? null : err});
       }
     },
     [dataSource, dispatch]

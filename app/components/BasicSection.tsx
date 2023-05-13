@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DataLayout } from 'react-flowstate';
 import { fetchDataRandomError } from '../data';
 
-export const BasicExampleSection = () => (
+export const BasicSection = () => (
   <div>
     <h1 className="text-3xl text-center">Basic</h1>
     <h3 className="text-1xl text-center mb-5">

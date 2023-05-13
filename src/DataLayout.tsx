@@ -9,22 +9,30 @@ import { isFunction } from './utils';
 import { DataLayoutProvider } from './DataLayoutContext';
 import { useDataLayout } from './useDataLayout';
 
+export const computeDisplayDecision = (config: { hideErrorFallbackOnReloadError?: boolean }, context: { isLoading: boolean; isLoadingInShadow: boolean; error: Error | null; initialDataLoaded: boolean }) => {
+  const { hideErrorFallbackOnReloadError } = config;
+  const { isLoading, isLoadingInShadow, error, initialDataLoaded } = context;
+
+  const showLoadingIndicator = isLoading && (!isLoadingInShadow || error || !initialDataLoaded);
+  const showErrorFallback = !!error && !showLoadingIndicator && (!initialDataLoaded || !hideErrorFallbackOnReloadError);
+  const showDataContent = initialDataLoaded && !showErrorFallback && !showLoadingIndicator;
+  return {
+    showLoadingIndicator,
+    showDataContent,
+    showErrorFallback,
+  }
+};
+
 export function DataLayout<Data extends ResponseData = ResponseData>(
   props: DataLayoutConfig<Data>
 ) {
   const contextValue = useDataLayout<Data>(props);
   const { children, loadingIndicator, errorFallback, hideErrorFallbackOnReloadError } = props;
-  const { isLoading, isLoadingInShadow, error, data, initialDataLoaded } = contextValue;
-  const {showLoadingIndicator, showDataContent, showErrorFallback} = useMemo(() => {
-    const showLoadingIndicator = isLoading && (!isLoadingInShadow || error);
-    const showErrorFallback = error && !showLoadingIndicator && (!initialDataLoaded || !hideErrorFallbackOnReloadError);
-    const showDataContent = data && !showErrorFallback && !showLoadingIndicator;
-    return {
-      showLoadingIndicator,
-      showDataContent,
-      showErrorFallback,
-    }
-  }, [isLoading, isLoadingInShadow, error, data, hideErrorFallbackOnReloadError]);
+  const { isLoading, isLoadingInShadow, error, initialDataLoaded } = contextValue;
+  const {showLoadingIndicator, showDataContent, showErrorFallback} = useMemo(() => computeDisplayDecision(
+    {hideErrorFallbackOnReloadError},
+    {isLoading, isLoadingInShadow, error, initialDataLoaded}
+  ), [isLoading, isLoadingInShadow, error, hideErrorFallbackOnReloadError]);
 
   const renderLoadingIndicator = useCallback(
     () => loadingIndicator && isFunction(loadingIndicator)
@@ -45,13 +53,10 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
 
   return (
     <DataLayoutProvider value={contextValue}>
-      {showLoadingIndicator && renderLoadingIndicator()}
-      {showDataContent && renderDataContent()}
-      {showErrorFallback && renderErrorFallback()}
-      {/*{showErrorFallback*/}
-      {/*  ? renderErrorFallback()*/}
-      {/*  : showLoadingIndicator ? renderLoadingIndicator()*/}
-      {/*    : showDataContent && renderDataContent()}*/}
+      {showErrorFallback
+        ? renderErrorFallback()
+        : showLoadingIndicator ? renderLoadingIndicator()
+          : showDataContent && renderDataContent()}
     </DataLayoutProvider>
   );
 }
