@@ -1,6 +1,6 @@
 import * as lodashSampleSize from 'lodash.samplesize';
 
-const SIZE = 4;
+const SIZE = 2;
 const DELAY = 2000;
 
 const REACT_LIBRARIES = [
@@ -68,23 +68,23 @@ const REACT_LIBRARIES = [
 
 export const INITIAL_DATA = lodashSampleSize(REACT_LIBRARIES, SIZE);
 
-export const fetchDataRandomError = () => {
-  const random = Math.random();
-  if (random < 0.5) {
-    return new Promise(resolve =>
-      setTimeout(() => resolve(lodashSampleSize(REACT_LIBRARIES, SIZE)), DELAY)
-    );
-  } else {
-    return new Promise((resolve, reject) =>
-      setTimeout(
-        () =>
-          reject(
-            new Error(
-              'Something wrong from server side! Please contact the backend developer!'
-            )
-          ),
-        DELAY
-      )
-    );
-  }
-};
+export const fetchData = () =>
+  new Promise(resolve =>
+    setTimeout(() => resolve(lodashSampleSize(REACT_LIBRARIES, SIZE)), DELAY)
+  );
+
+export const fetchDataWithError = () =>
+  new Promise((resolve, reject) =>
+    setTimeout(
+      () =>
+        reject(
+          new Error(
+            'Something wrong from server side! Please contact the backend developer!'
+          )
+        ),
+      DELAY
+    )
+  );
+
+export const fetchDataRandomError = () =>
+  Math.random() < 0.5 ? fetchData() : fetchDataWithError();

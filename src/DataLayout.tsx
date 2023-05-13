@@ -16,8 +16,8 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
   const { children, loadingIndicator, errorFallback, hideErrorFallbackOnReloadError } = props;
   const { isLoading, isLoadingInShadow, error, data, initialDataLoaded } = contextValue;
   const {showLoadingIndicator, showDataContent, showErrorFallback} = useMemo(() => {
-    const showLoadingIndicator = isLoading && !isLoadingInShadow;
-    const showErrorFallback = error && (!initialDataLoaded || !hideErrorFallbackOnReloadError);
+    const showLoadingIndicator = isLoading && (!isLoadingInShadow || error);
+    const showErrorFallback = error && !showLoadingIndicator && (!initialDataLoaded || !hideErrorFallbackOnReloadError);
     const showDataContent = data && !showErrorFallback && !showLoadingIndicator;
     return {
       showLoadingIndicator,
@@ -48,6 +48,10 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
       {showLoadingIndicator && renderLoadingIndicator()}
       {showDataContent && renderDataContent()}
       {showErrorFallback && renderErrorFallback()}
+      {/*{showErrorFallback*/}
+      {/*  ? renderErrorFallback()*/}
+      {/*  : showLoadingIndicator ? renderLoadingIndicator()*/}
+      {/*    : showDataContent && renderDataContent()}*/}
     </DataLayoutProvider>
   );
 }

@@ -1,14 +1,14 @@
-import 'react-app-polyfill/ie11';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { DataLayout } from 'react-flowstate';
 import toastr from 'toastr';
-import { fetchDataRandomError, INITIAL_DATA } from './data';
+import { fetchDataRandomError, INITIAL_DATA } from '../data';
 
-const App = () => (
-  <div className="container mx-auto p-4">
-    <h1 className="text-3xl text-center">Awesome React Libraries</h1>
-    <h3 className="text-1xl text-center mb-5">Appreciate the Great Works</h3>
+export const AdvancedErrorHandlingExampleSection = () => (
+  <div>
+    <h1 className="text-3xl text-center">Advanced error handling</h1>
+    <h3 className="text-1xl text-center mb-5">
+      Keep current data when reload throws error
+    </h3>
     <DataLayout
       initialData={INITIAL_DATA}
       shadowReload
@@ -43,7 +43,7 @@ const App = () => (
     >
       {({ data, reload, isLoading }) => (
         <div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {data.map((member, index) => (
               <div className="card bg-green-100 shadow-xl" key={index}>
                 <div className="card-body">
@@ -75,5 +75,3 @@ const App = () => (
     </DataLayout>
   </div>
 );
-
-ReactDOM.render(<App />, document.getElementById('root'));
