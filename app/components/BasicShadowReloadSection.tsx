@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { DataLayout } from 'react-flowstate';
 import { fetchDataRandomError } from '../data';
+import {DataLayout} from "react-flowstate";
 
 export const BasicShadowReloadSection = () => (
   <div>

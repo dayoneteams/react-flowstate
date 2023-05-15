@@ -1,6 +1,6 @@
 {
   "name": "react-flowstate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Get rid of useEffect, useState for data fetching and loading indicator.",
   "author": "Hao Tang <haotang.io@gmail.com> (https://dayoneteams.com)",
   "repository": {
@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "start:app": "npm i -C ./app && npm run -C ./app start",
+    "start:app": "npm i -C app && npm run -C app start",
+    "start:app1": "npm i -C app1 && npm run -C app1 start",
     "build": "tsdx build",
     "test": "jest",
     "lint": "tsdx lint src app examples",
@@ -29,7 +30,7 @@
     "analyze": "size-limit --why"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=16.8.0"
   },
   "husky": {
     "hooks": {

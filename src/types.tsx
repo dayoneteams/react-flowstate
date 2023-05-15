@@ -22,7 +22,7 @@ export type DataLayoutState<Data> = {
 };
 
 /**
- * Formik computed properties. These are read-only.
+ * Computed properties. These are read-only.
  */
 export interface DataLayoutComputedProps<Data> {
   /** The initial values of the form */

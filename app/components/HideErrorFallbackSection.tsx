@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { DataLayout } from 'react-flowstate';
 import toastr from 'toastr';
 import { fetchDataRandomError } from '../data';
+import {DataLayout} from "react-flowstate";
 
 export const HideErrorFallbackSection = () => (
   <div>

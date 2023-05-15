@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataLayout } from 'react-flowstate';
+import {DataLayout} from "react-flowstate";
 import { fetchDataRandomError, INITIAL_DATA } from '../data';
 
 export const BasicInitialDataSection = () => (

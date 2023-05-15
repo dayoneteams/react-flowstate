@@ -66,7 +66,20 @@ const REACT_LIBRARIES = [
   },
 ];
 
-export const INITIAL_DATA = lodashSampleSize(REACT_LIBRARIES, SIZE);
+export const INITIAL_DATA = [
+  {
+    name: 'React Router',
+    description:
+      'A library for building single-page applications with dynamic routing in React.',
+    websiteUrl: 'https://reactrouter.com/',
+  },
+  {
+    name: 'Redux',
+    description:
+      'A predictable state container for JavaScript apps, providing a centralized store for managing application state.',
+    websiteUrl: 'https://redux.js.org/',
+  },
+];
 
 export const fetchData = () =>
   new Promise(resolve =>
