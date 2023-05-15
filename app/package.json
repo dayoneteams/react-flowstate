@@ -20,9 +20,7 @@
     "react-dom": "file:../node_modules/react-dom",
     "react-flowstate": "file:..",
     "toastr": "^2.1.4",
-    "typescript": "5.0.4"
-  },
-  "devDependencies": {
+    "typescript": "5.0.4",
     "sass": "^1.62.1"
   }
 }

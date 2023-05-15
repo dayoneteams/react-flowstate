@@ -1,16 +1,22 @@
-import {BasicInitialDataSection} from "@/components/BasicInitialDataSection";
-import {HideErrorFallbackSection} from "@/components/HideErrorFallbackSection";
-import {BasicSection} from "@/components/BasicSection";
-import {BasicShadowReloadSection} from "@/components/BasicShadowReloadSection";
+import Link from "next/link";
 
+const LINKS = [
+  {label: 'Basic', url: '/basic'},
+  {label: 'Initial data', url: '/initial-data'},
+  {label: 'Shadow reload', url: '/shadow-reload'},
+  {label: 'Hide error fallback', url: '/hide-error-fallback'},
+]
 const App = () => (
   <div className="container mx-auto p-4">
-    <div className="grid grid-cols-2 gap-4">
-      <BasicSection />
-      <BasicShadowReloadSection />
-      <BasicInitialDataSection />
-      <HideErrorFallbackSection />
-    </div>
+    <ul>
+      {LINKS.map(({label, url}) => (
+        <li>
+          <Link key={url} href={url} class="link">
+            {label}
+          </Link>
+        </li>
+      ))}
+    </ul>
   </div>
 );
 

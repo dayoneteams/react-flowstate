@@ -1,6 +1,6 @@
 import * as lodashSampleSize from 'lodash.samplesize';
 
-const SIZE = 2;
+const SIZE = 4;
 const DELAY = 2000;
 
 const REACT_LIBRARIES = [
@@ -78,6 +78,18 @@ export const INITIAL_DATA = [
     description:
       'A predictable state container for JavaScript apps, providing a centralized store for managing application state.',
     websiteUrl: 'https://redux.js.org/',
+  },
+  {
+    name: 'Axios',
+    description:
+      'A library for making HTTP requests from JavaScript applications, offering a simple API for sending and receiving data from APIs.',
+    websiteUrl: 'https://axios-http.com/',
+  },
+  {
+    name: 'React Bootstrap',
+    description:
+      "A library of React components that implement Bootstrap's CSS framework, offering pre-designed components for building responsive and customizable UIs.",
+    websiteUrl: 'https://react-bootstrap.github.io/',
   },
 ];
 

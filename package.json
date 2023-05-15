@@ -20,7 +20,6 @@
   "scripts": {
     "start": "tsdx watch",
     "start:app": "npm i -C app && npm run -C app start",
-    "start:app1": "npm i -C app1 && npm run -C app1 start",
     "build": "tsdx build",
     "test": "jest",
     "lint": "tsdx lint src app examples",
