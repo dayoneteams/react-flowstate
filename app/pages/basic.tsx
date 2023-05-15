@@ -1,5 +1,6 @@
-import {fetchDataRandomError} from "@/data";
-import {DataLayout} from "../../dist";
+import React from 'react';
+import { fetchDataRandomError } from '@/data';
+import { DataLayout } from '../../dist';
 
 export default () => {
   return (
@@ -18,9 +19,9 @@ export default () => {
         )}
         errorFallback={(err, { reload, isLoading }) => (
           <div className="text-center">
-          <span className="text-5xl" role="img" aria-label="cry on error">
-            🥵
-          </span>
+            <span className="text-5xl" role="img" aria-label="cry on error">
+              🥵
+            </span>
             <div className="text-red-500 mt-1">{err.message}</div>
             <div className="mt-5 flex justify-center">
               <button
@@ -75,5 +76,5 @@ export default () => {
         )}
       </DataLayout>
     </div>
-  )
-}
+  );
+};
