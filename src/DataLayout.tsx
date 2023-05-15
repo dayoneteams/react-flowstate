@@ -9,12 +9,12 @@ import { isFunction } from './utils';
 import { DataLayoutProvider } from './DataLayoutContext';
 import { useDataLayout } from './useDataLayout';
 
-export const computeDisplayDecision = (config: { hideErrorFallbackOnReloadError?: boolean }, context: { isLoading: boolean; isLoadingInShadow: boolean; error: Error | null; initialDataLoaded: boolean }) => {
-  const { hideErrorFallbackOnReloadError } = config;
+export const computeDisplayDecision = (config: { preserveDataOnError?: boolean }, context: { isLoading: boolean; isLoadingInShadow: boolean; error: Error | null; initialDataLoaded: boolean }) => {
+  const { preserveDataOnError } = config;
   const { isLoading, isLoadingInShadow, error, initialDataLoaded } = context;
 
   const showLoadingIndicator = isLoading && (!isLoadingInShadow || error || !initialDataLoaded);
-  const showErrorFallback = !!error && !showLoadingIndicator && (!initialDataLoaded || !hideErrorFallbackOnReloadError);
+  const showErrorFallback = !!error && !showLoadingIndicator && (!initialDataLoaded || !preserveDataOnError);
   const showDataContent = initialDataLoaded && !showErrorFallback && !showLoadingIndicator;
   return {
     showLoadingIndicator,
@@ -27,12 +27,12 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
   props: DataLayoutConfig<Data>
 ) {
   const contextValue = useDataLayout<Data>(props);
-  const { children, loadingIndicator, errorFallback, hideErrorFallbackOnReloadError } = props;
+  const { children, loadingIndicator, errorFallback, preserveDataOnError } = props;
   const { isLoading, isLoadingInShadow, error, initialDataLoaded } = contextValue;
   const {showLoadingIndicator, showDataContent, showErrorFallback} = useMemo(() => computeDisplayDecision(
-    {hideErrorFallbackOnReloadError},
+    {preserveDataOnError},
     {isLoading, isLoadingInShadow, error, initialDataLoaded}
-  ), [isLoading, isLoadingInShadow, error, hideErrorFallbackOnReloadError]);
+  ), [isLoading, isLoadingInShadow, error, preserveDataOnError]);
 
   const renderLoadingIndicator = useCallback(
     () => loadingIndicator && isFunction(loadingIndicator)

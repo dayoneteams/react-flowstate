@@ -4,7 +4,7 @@ import {computeDisplayDecision} from "../src/DataLayout";
 describe('DataLayout', () => {
   describe('computeDisplayDecision()', () => {
     test('shows loading indicator while fetching data by default', () => {
-      expect(computeDisplayDecision({hideErrorFallbackOnReloadError: false}, {
+      expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: true,
         isLoadingInShadow: false,
         error: null,
@@ -17,7 +17,7 @@ describe('DataLayout', () => {
     });
 
     test('shows loading indicator on when initial data does not exists', () => {
-      expect(computeDisplayDecision({hideErrorFallbackOnReloadError: false}, {
+      expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: true,
         isLoadingInShadow: false,
         error: null,
@@ -29,7 +29,7 @@ describe('DataLayout', () => {
       });
 
       // Ignore shadow mode.
-      expect(computeDisplayDecision({hideErrorFallbackOnReloadError: false}, {
+      expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: true,
         isLoadingInShadow: true,
         error: null,
@@ -42,7 +42,7 @@ describe('DataLayout', () => {
     });
 
     test('hides loading indicator in shadowReload mode by default', () => {
-      expect(computeDisplayDecision({hideErrorFallbackOnReloadError: false}, {
+      expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: true,
         isLoadingInShadow: true,
         error: null,
@@ -55,7 +55,7 @@ describe('DataLayout', () => {
     });
 
     test('shows error fallback on error by default', () => {
-      expect(computeDisplayDecision({hideErrorFallbackOnReloadError: false}, {
+      expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: false,
         isLoadingInShadow: false,
         error: new Error('api error'),
@@ -67,8 +67,8 @@ describe('DataLayout', () => {
       });
     });
 
-    test('hides error fallback and keeps showing data content on error when hideErrorFallbackOnReloadError is "true"', () => {
-      expect(computeDisplayDecision({hideErrorFallbackOnReloadError: true}, {
+    test('hides error fallback and keeps showing data content on error when preserveDataOnError is "true"', () => {
+      expect(computeDisplayDecision({preserveDataOnError: true}, {
         isLoading: false,
         isLoadingInShadow: false,
         error: new Error('api error'),
@@ -81,7 +81,7 @@ describe('DataLayout', () => {
     });
 
     test('shows data content when no error or data fetching happens', () => {
-      expect(computeDisplayDecision({hideErrorFallbackOnReloadError: false}, {
+      expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: false,
         isLoadingInShadow: false,
         error: null,

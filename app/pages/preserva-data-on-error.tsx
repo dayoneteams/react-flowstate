@@ -9,7 +9,7 @@ export default () => {
       <h1 className="text-3xl text-center">Advanced error handling</h1>
       <h3 className="text-1xl text-center mb-5">Hide error fallback</h3>
       <DataLayout
-        hideErrorFallbackOnReloadError
+        preserveDataOnError
         dataSource={fetchDataRandomError}
         loadingIndicator={
           <div className="text-center">

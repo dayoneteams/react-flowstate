@@ -54,7 +54,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   initialData,
   dataSource,
   shadowReload = false,
-  hideErrorFallbackOnReloadError = false,
+  preserveDataOnError = false,
   onError
 }: DataLayoutConfig<Data>) {
   const [state, dispatch] = useReducer<
@@ -79,7 +79,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         if (onError) {
           onError(err as Error);
         }
-        dispatch({type: 'LOAD_FAILURE', payload: hideErrorFallbackOnReloadError ? null : err});
+        dispatch({type: 'LOAD_FAILURE', payload: preserveDataOnError ? null : err});
       }
     },
     [dataSource, dispatch]

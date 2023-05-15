@@ -82,7 +82,7 @@ export interface DataLayoutConfig<Data> {
   /**
    * @default false
    */
-  hideErrorFallbackOnReloadError?: boolean;
+  preserveDataOnError?: boolean;
 
   /**
    * Callback function on error. Useful for showing toast or alert.
