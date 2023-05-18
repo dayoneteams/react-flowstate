@@ -9,7 +9,10 @@ import {
 type DataLayoutAction<Values> =
   | { type: 'LOAD_START'; payload: { shadow: boolean } }
   | { type: 'LOAD_SUCCESS'; payload: Values }
-  | { type: 'LOAD_FAILURE'; payload: Error | null };
+  | {
+      type: 'LOAD_FAILURE';
+      payload: { error: Error | null; preserveData: boolean };
+    };
 
 const CLEAR_ERROR = {
   error: null,
@@ -29,6 +32,7 @@ export function dataLayoutReducer<Data>(
       return {
         ...state,
         ...CLEAR_ERROR,
+        data: action.payload.shadow ? state.data : null,
         isLoading: true,
         isLoadingInShadow: action.payload.shadow,
       };
@@ -44,7 +48,8 @@ export function dataLayoutReducer<Data>(
       return {
         ...state,
         ...CLEAR_LOADING,
-        error: action.payload,
+        data: action.payload.preserveData ? state.data : null,
+        error: action.payload.error,
       };
     default:
       return state;
@@ -55,6 +60,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   initialData,
   dataSource,
   shadowReload = false,
+  preserveDataOnError = false,
   onError,
 }: DataLayoutConfig<Data>) {
   const [state, dispatch] = useReducer<
@@ -82,10 +88,13 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         if (onError) {
           onError(err as Error, state);
         }
-        dispatch({ type: 'LOAD_FAILURE', payload: err });
+        dispatch({
+          type: 'LOAD_FAILURE',
+          payload: { error: err, preserveData: preserveDataOnError },
+        });
       }
     },
-    [dataSource, dispatch, onError, state, shadowReload]
+    [dataSource, dispatch, onError, state, shadowReload, preserveDataOnError]
   );
 
   const reload = useCallback(

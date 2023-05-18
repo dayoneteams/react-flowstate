@@ -5,9 +5,7 @@ import { fetchDataRandomError } from '@/data';
 export default () => (
   <div className="container mx-auto p-4">
     <h1 className="text-3xl text-center">Basic shadow reload</h1>
-    <h3 className="text-1xl text-center mb-5">
-      Loading indicator and error handling
-    </h3>
+    <h3 className="text-1xl text-center mb-5">Show error fallback on error</h3>
     <DataLayout
       dataSource={fetchDataRandomError}
       shadowReload

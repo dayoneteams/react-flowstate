@@ -21,7 +21,7 @@ describe('DataLayout', () => {
       });
     });
 
-    test('shows loading indicator when data does not exists', () => {
+    test('shows loading indicator when data is not available', () => {
       expect(
         computeDisplayDecision(
           { preserveDataOnError: false },
@@ -47,6 +47,24 @@ describe('DataLayout', () => {
             isLoadingInShadow: true,
             error: null,
             initialDataLoaded: false,
+          }
+        )
+      ).toEqual({
+        showLoadingIndicator: true,
+        showDataContent: false,
+        showErrorFallback: false,
+      });
+    });
+
+    test('shows loading indicator when reloading after error fallback', () => {
+      expect(
+        computeDisplayDecision(
+          { preserveDataOnError: false },
+          {
+            isLoading: true,
+            isLoadingInShadow: true,
+            error: new Error('mocked error'),
+            initialDataLoaded: true,
           }
         )
       ).toEqual({

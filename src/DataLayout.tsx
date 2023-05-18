@@ -23,7 +23,7 @@ export const computeDisplayDecision = (
   const { isLoading, isLoadingInShadow, error, initialDataLoaded } = context;
 
   const showLoadingIndicator =
-    isLoading && (!isLoadingInShadow || error || !initialDataLoaded);
+    isLoading && (!isLoadingInShadow || !!error || !initialDataLoaded);
   const showErrorFallback =
     !!error &&
     !showLoadingIndicator &&

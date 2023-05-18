@@ -30,6 +30,9 @@ export interface DataLayoutComputedProps<Data> {
 
   /** Indicate whether data source has been called and successfully returned data */
   readonly isFirstFetchSuccess: boolean;
+
+  /** Last time when data was successfully fetched */
+  readonly lastSuccessfulFetch: Date;
 }
 
 /**
