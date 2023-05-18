@@ -19,14 +19,16 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "start:app": "npm i -C app && npm run -C app dev",
+    "app": "npm i -C app && npm run -C app dev",
+    "app:prod": "npm i -C app && npm run -C app build && npm start -C app ",
     "build": "tsdx build",
     "test": "jest",
     "lint": "tsdx lint src app examples",
     "lint:fix": "tsdx lint src app examples --fix",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "prepublish": "npm run lint && npm run test"
   },
   "peerDependencies": {
     "react": ">=16.8.0"

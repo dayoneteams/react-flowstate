@@ -40,7 +40,7 @@ export default () => {
         {({ data, reload, isLoading }) => (
           <div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {data.map((member, index) => (
+              {data?.map((member, index) => (
                 <div className="card bg-green-100 shadow-xl" key={index}>
                   <div className="card-body">
                     <h2 className="card-title">{member.name}</h2>

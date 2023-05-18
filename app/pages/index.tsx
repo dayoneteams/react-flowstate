@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 
 const LINKS = [
@@ -7,18 +7,21 @@ const LINKS = [
   { label: 'Shadow reload', url: '/shadow-reload' },
   { label: 'Preserve data on error', url: '/preserva-data-on-error' },
 ];
-const App = () => (
-  <div className="container mx-auto p-4">
-    <ul>
-      {LINKS.map(({ label, url }) => (
-        <li>
-          <Link key={url} href={url} class="link">
-            {label}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+const App = () => {
+  useEffect(() => console.log('123'), []);
+  return (
+    <div className="container mx-auto p-4">
+      <ul>
+        {LINKS.map(({ label, url }) => (
+          <li key={url}>
+            <Link href={url} className="link">
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default App;

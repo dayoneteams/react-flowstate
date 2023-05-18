@@ -1,9 +1,15 @@
-import * as lodashSampleSize from 'lodash.samplesize';
+import lodashSampleSize from 'lodash.samplesize';
 
 const SIZE = 4;
 const DELAY = 2000;
 
-const REACT_LIBRARIES = [
+interface ItemType {
+  name: string;
+  description: string;
+  websiteUrl: string;
+}
+
+const REACT_LIBRARIES: ItemType[] = [
   {
     name: 'React Router',
     description:
@@ -66,7 +72,7 @@ const REACT_LIBRARIES = [
   },
 ];
 
-export const INITIAL_DATA = [
+export const INITIAL_DATA: ItemType[] = [
   {
     name: 'React Router',
     description:
@@ -93,12 +99,12 @@ export const INITIAL_DATA = [
   },
 ];
 
-export const fetchData = () =>
-  new Promise(resolve =>
+export const fetchData = async (): Promise<ItemType[]> =>
+  await new Promise<ItemType[]>(resolve =>
     setTimeout(() => resolve(lodashSampleSize(REACT_LIBRARIES, SIZE)), DELAY)
   );
 
-export const fetchDataWithError = () =>
+export const fetchDataWithError = (): Promise<ItemType[]> =>
   new Promise((resolve, reject) =>
     setTimeout(
       () =>
@@ -111,5 +117,5 @@ export const fetchDataWithError = () =>
     )
   );
 
-export const fetchDataRandomError = () =>
+export const fetchDataRandomError = (): Promise<ItemType[]> =>
   Math.random() < 0.5 ? fetchData() : fetchDataWithError();

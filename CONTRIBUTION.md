@@ -19,11 +19,14 @@ This builds to `/dist` and runs the project in watch mode so any edits you save 
 
 Open another terminal window and run the test app.
 ```
-npm run start:app
+npm run app
 ```
-The default test app imports and live reloads whatever is in `/dist`.
+Check the test app on http://localhost:3000
 
-Check the test app on http://localhost:1234
+To build and run test app on production mode
+```
+npm run app:prod
+```
 
 ### Test
 ```

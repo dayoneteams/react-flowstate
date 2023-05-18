@@ -41,7 +41,7 @@ export type DataLayoutRenderFunction<Data> = RenderFunction<
 >;
 
 export type RenderFunction<Props = undefined> = (
-  props?: Props
+  props: Props
 ) => React.ReactNode;
 
 /**
