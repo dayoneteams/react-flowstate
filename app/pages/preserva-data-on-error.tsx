@@ -17,7 +17,7 @@ export default () => (
           <div>Wait me a sec ...</div>
         </div>
       }
-      onError={(err) => {
+      onError={err => {
         toastr.error(err.message, 'Opps! There is an error.');
       }}
       errorFallback={(err, { reload, isLoading }) => (

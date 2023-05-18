@@ -48,7 +48,7 @@ export type RenderFunction<Props = undefined> = (
  * <DataLayout /> props
  */
 export interface DataLayoutConfig<Data> {
-  initialData?: Data,
+  initialData?: Data;
 
   /**
    * UI component to render
@@ -95,6 +95,6 @@ export interface DataLayoutConfig<Data> {
    * React component to render UI displaying error
    */
   errorFallback?:
-    ((err: Error, state: DataLayoutProps<Data>) => React.ReactNode)
+    | ((err: Error, state: DataLayoutProps<Data>) => React.ReactNode)
     | React.ReactNode;
 }

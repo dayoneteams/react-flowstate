@@ -18,7 +18,7 @@ const CLEAR_ERROR = {
 const CLEAR_LOADING = {
   isLoading: false,
   isLoadingInShadow: false,
-}
+};
 
 function dataLayoutReducer<Data>(
   state: DataLayoutState<Data>,
@@ -54,7 +54,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   initialData,
   dataSource,
   shadowReload = false,
-  onError
+  onError,
 }: DataLayoutConfig<Data>) {
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
@@ -66,7 +66,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     isLoadingInShadow: !initialData && shadowReload,
   });
 
-  const {initialDataLoaded, error, isLoading, isLoadingInShadow} = state;
+  const { initialDataLoaded, error, isLoading, isLoadingInShadow } = state;
 
   const loadData = useCallback(
     async (shadow = false) => {
@@ -78,17 +78,17 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         if (onError) {
           onError(err as Error);
         }
-        dispatch({type: 'LOAD_FAILURE', payload: err});
+        dispatch({ type: 'LOAD_FAILURE', payload: err });
       }
     },
-    [dataSource, dispatch]
+    [dataSource, dispatch, onError]
   );
 
   const reload = useCallback(
     (options?: { shadow: boolean }) => {
       loadData(options?.shadow || shadowReload);
     },
-    [loadData]
+    [loadData, shadowReload]
   );
 
   useEffect(() => {
