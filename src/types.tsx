@@ -25,8 +25,11 @@ export type DataLayoutState<Data> = {
  * Computed properties. These are read-only.
  */
 export interface DataLayoutComputedProps<Data> {
-  /** The initial values of the form */
+  /** The initial values of the layout */
   readonly initialData: Data;
+
+  /** Indicate whether data source has been called and successfully returned data */
+  readonly isFirstFetchSuccess: boolean;
 }
 
 /**
@@ -41,7 +44,7 @@ export type DataLayoutRenderFunction<Data> = RenderFunction<
 >;
 
 export type RenderFunction<Props = undefined> = (
-  props: Props
+  props?: Props
 ) => React.ReactNode;
 
 /**
@@ -89,7 +92,7 @@ export interface DataLayoutConfig<Data> {
    * @param err
    * @param state
    */
-  onError?: (err: Error) => unknown;
+  onError?: (err: Error, state: DataLayoutState<Data>) => unknown;
 
   /**
    * React component to render UI displaying error

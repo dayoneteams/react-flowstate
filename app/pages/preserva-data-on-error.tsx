@@ -1,7 +1,7 @@
 import React from 'react';
 import toastr from 'toastr';
 import { DataLayout } from 'react-flowstate';
-import { fetchDataWithError } from '@/data';
+import { fetchDataRandomError } from '@/data';
 
 export default () => (
   <div className="container mx-auto p-4">
@@ -10,15 +10,17 @@ export default () => (
     <DataLayout
       preserveDataOnError
       shadowReload
-      dataSource={fetchDataWithError}
+      dataSource={fetchDataRandomError}
       loadingIndicator={
         <div className="text-center">
           <progress className="progress progress-accent w-56" />
           <div>Wait me a sec ...</div>
         </div>
       }
-      onError={err => {
-        toastr.error(err.message, 'Opps! There is an error.');
+      onError={(err, { data }) => {
+        if (data) {
+          toastr.error(err.message, 'Opps! There is an error.');
+        }
       }}
       errorFallback={(err, { reload, isLoading }) => (
         <div className="text-center">

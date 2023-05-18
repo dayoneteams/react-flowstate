@@ -20,7 +20,7 @@ const CLEAR_LOADING = {
   isLoadingInShadow: false,
 };
 
-function dataLayoutReducer<Data>(
+export function dataLayoutReducer<Data>(
   state: DataLayoutState<Data>,
   action: DataLayoutAction<Data>
 ): DataLayoutState<Data> {
@@ -28,6 +28,7 @@ function dataLayoutReducer<Data>(
     case 'LOAD_START':
       return {
         ...state,
+        ...CLEAR_ERROR,
         isLoading: true,
         isLoadingInShadow: action.payload.shadow,
       };
@@ -71,17 +72,20 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const loadData = useCallback(
     async (shadow = false) => {
       try {
-        dispatch({ type: 'LOAD_START', payload: { shadow } });
+        dispatch({
+          type: 'LOAD_START',
+          payload: { shadow: shadow || shadowReload },
+        });
         const fetchedData = await dataSource();
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
         if (onError) {
-          onError(err as Error);
+          onError(err as Error, state);
         }
         dispatch({ type: 'LOAD_FAILURE', payload: err });
       }
     },
-    [dataSource, dispatch, onError]
+    [dataSource, dispatch, onError, state, shadowReload]
   );
 
   const reload = useCallback(
@@ -95,7 +99,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     if (!initialDataLoaded) {
       loadData();
     }
-  }, [loadData, initialDataLoaded]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const context: DataLayoutContextType<Data> = {
     data: state.data,
