@@ -83,6 +83,7 @@ describe('DataLayout', () => {
             isLoadingInShadow: true,
             error: null,
             initialDataLoaded: true,
+            data: [1, 2, 3],
           }
         )
       ).toEqual({

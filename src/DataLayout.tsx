@@ -10,20 +10,22 @@ import { DataLayoutProvider } from './DataLayoutContext';
 import { useDataLayout } from './useDataLayout';
 
 // TODO: Need refactoring for args.
-export const computeDisplayDecision = (
+export function computeDisplayDecision<D>(
   config: { preserveDataOnError?: boolean },
   context: {
     isLoading: boolean;
     isLoadingInShadow: boolean;
     error: Error | null;
     initialDataLoaded: boolean;
+    data: D;
   }
-) => {
+) {
   const { preserveDataOnError } = config;
-  const { isLoading, isLoadingInShadow, error, initialDataLoaded } = context;
+  const { isLoading, isLoadingInShadow, error, initialDataLoaded, data } = context;
 
+  // TODO: always show loading indicator when data is not available
   const showLoadingIndicator =
-    isLoading && (!isLoadingInShadow || !!error || !initialDataLoaded);
+    isLoading && (!data || !isLoadingInShadow || !!error || !initialDataLoaded);
   const showErrorFallback =
     !!error &&
     !showLoadingIndicator &&
@@ -35,7 +37,7 @@ export const computeDisplayDecision = (
     showDataContent,
     showErrorFallback,
   };
-};
+}
 
 export function DataLayout<Data extends ResponseData = ResponseData>(
   props: DataLayoutConfig<Data>
@@ -52,6 +54,7 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     isLoadingInShadow,
     error,
     initialDataLoaded,
+    data,
   } = contextValue;
   const {
     showLoadingIndicator,
@@ -61,7 +64,7 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     () =>
       computeDisplayDecision(
         { preserveDataOnError },
-        { isLoading, isLoadingInShadow, error, initialDataLoaded }
+        { isLoading, isLoadingInShadow, error, initialDataLoaded, data }
       ),
     [
       preserveDataOnError,
@@ -69,6 +72,7 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
       isLoadingInShadow,
       error,
       initialDataLoaded,
+      data,
     ]
   );
 
