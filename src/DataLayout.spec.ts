@@ -1,5 +1,5 @@
 import {describe, test} from '@jest/globals';
-import {computeDisplayDecision} from "../src/DataLayout";
+import {computeDisplayDecision} from "./DataLayout";
 
 describe('DataLayout', () => {
   describe('computeDisplayDecision()', () => {
@@ -16,7 +16,7 @@ describe('DataLayout', () => {
       });
     });
 
-    test('shows loading indicator on when initial data does not exists', () => {
+    test('shows loading indicator when data does not exists', () => {
       expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: true,
         isLoadingInShadow: false,
@@ -41,7 +41,7 @@ describe('DataLayout', () => {
       });
     });
 
-    test('hides loading indicator in shadowReload mode by default', () => {
+    test('hides loading indicator when reloading in shadowReload mode and data exists', () => {
       expect(computeDisplayDecision({preserveDataOnError: false}, {
         isLoading: true,
         isLoadingInShadow: true,
@@ -60,6 +60,19 @@ describe('DataLayout', () => {
         isLoadingInShadow: false,
         error: new Error('api error'),
         initialDataLoaded: true,
+      })).toEqual({
+        showLoadingIndicator: false,
+        showDataContent: false,
+        showErrorFallback: true,
+      });
+    });
+
+    test('shows error fallback on error when data does not exist', () => {
+      expect(computeDisplayDecision({shadowReload: true, preserveDataOnError: true}, {
+        isLoading: false,
+        isLoadingInShadow: false,
+        error: new Error('api error'),
+        initialDataLoaded: false,
       })).toEqual({
         showLoadingIndicator: false,
         showDataContent: false,

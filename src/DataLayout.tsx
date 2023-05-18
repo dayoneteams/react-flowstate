@@ -9,7 +9,8 @@ import { isFunction } from './utils';
 import { DataLayoutProvider } from './DataLayoutContext';
 import { useDataLayout } from './useDataLayout';
 
-export const computeDisplayDecision = (config: { preserveDataOnError?: boolean }, context: { isLoading: boolean; isLoadingInShadow: boolean; error: Error | null; initialDataLoaded: boolean }) => {
+// TODO: Need refactoring for args.
+export const computeDisplayDecision = (config: { shadowReload?: boolean, preserveDataOnError?: boolean }, context: { isLoading: boolean; isLoadingInShadow: boolean; error: Error | null; initialDataLoaded: boolean }) => {
   const { preserveDataOnError } = config;
   const { isLoading, isLoadingInShadow, error, initialDataLoaded } = context;
 
@@ -27,12 +28,12 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
   props: DataLayoutConfig<Data>
 ) {
   const contextValue = useDataLayout<Data>(props);
-  const { children, loadingIndicator, errorFallback, preserveDataOnError } = props;
+  const { children, loadingIndicator, errorFallback, preserveDataOnError, shadowReload } = props;
   const { isLoading, isLoadingInShadow, error, initialDataLoaded } = contextValue;
   const {showLoadingIndicator, showDataContent, showErrorFallback} = useMemo(() => computeDisplayDecision(
-    {preserveDataOnError},
+    {preserveDataOnError, shadowReload},
     {isLoading, isLoadingInShadow, error, initialDataLoaded}
-  ), [isLoading, isLoadingInShadow, error, preserveDataOnError]);
+  ), [preserveDataOnError, shadowReload, isLoading, isLoadingInShadow, error, initialDataLoaded]);
 
   const renderLoadingIndicator = useCallback(
     () => loadingIndicator && isFunction(loadingIndicator)
