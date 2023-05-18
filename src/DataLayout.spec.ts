@@ -95,7 +95,7 @@ describe('DataLayout', () => {
     test('shows error fallback on error when data does not exist', () => {
       expect(
         computeDisplayDecision(
-          { shadowReload: true, preserveDataOnError: true },
+          { preserveDataOnError: true },
           {
             isLoading: false,
             isLoadingInShadow: false,

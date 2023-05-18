@@ -11,7 +11,7 @@ import { useDataLayout } from './useDataLayout';
 
 // TODO: Need refactoring for args.
 export const computeDisplayDecision = (
-  config: { shadowReload?: boolean; preserveDataOnError?: boolean },
+  config: { preserveDataOnError?: boolean },
   context: {
     isLoading: boolean;
     isLoadingInShadow: boolean;
@@ -46,7 +46,6 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     loadingIndicator,
     errorFallback,
     preserveDataOnError,
-    shadowReload,
   } = props;
   const {
     isLoading,
@@ -61,12 +60,11 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
   } = useMemo(
     () =>
       computeDisplayDecision(
-        { preserveDataOnError, shadowReload },
+        { preserveDataOnError },
         { isLoading, isLoadingInShadow, error, initialDataLoaded }
       ),
     [
       preserveDataOnError,
-      shadowReload,
       isLoading,
       isLoadingInShadow,
       error,
