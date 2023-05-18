@@ -118,4 +118,4 @@ export const fetchDataWithError = (): Promise<ItemType[]> =>
   );
 
 export const fetchDataRandomError = (): Promise<ItemType[]> =>
-  Math.random() < 0.3 ? fetchData() : fetchDataWithError();
+  Math.random() < 0.5 ? fetchData() : fetchDataWithError();

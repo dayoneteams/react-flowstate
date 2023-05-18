@@ -3,7 +3,6 @@ import {
   DataLayoutConfig,
   DataLayoutProps,
   DataLayoutRenderFunction,
-  RenderFunction,
   ResponseData,
 } from './types';
 import { isFunction } from './utils';
@@ -75,32 +74,44 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     ]
   );
 
-  const renderLoadingIndicator = useCallback(
-    () =>
-      loadingIndicator && isFunction(loadingIndicator)
-        ? (loadingIndicator as RenderFunction)()
-        : React.Children.only(loadingIndicator),
-    [loadingIndicator]
-  );
+  const renderLoadingIndicator = useCallback(() => {
+    if (!loadingIndicator) {
+      return null;
+    }
 
-  const renderDataContent = useCallback(
-    () =>
-      isFunction(children)
-        ? (children as DataLayoutRenderFunction<Data>)(contextValue)
-        : React.Children.only(children),
-    [contextValue, children]
-  );
+    if (isFunction(loadingIndicator)) {
+      return loadingIndicator();
+    }
 
-  const renderErrorFallback = useCallback(
-    () =>
-      isFunction(errorFallback)
-        ? (errorFallback as (
-            err: Error,
-            state: DataLayoutProps<Data>
-          ) => React.ReactNode)(contextValue.error as Error, contextValue)
-        : React.Children.only(errorFallback),
-    [contextValue, errorFallback]
-  );
+    return React.Children.only(loadingIndicator);
+  }, [loadingIndicator]);
+
+  const renderDataContent = useCallback(() => {
+    if (!children) {
+      return null;
+    }
+
+    if (isFunction(children)) {
+      return (children as DataLayoutRenderFunction<Data>)(contextValue);
+    }
+
+    return React.Children.only(children);
+  }, [contextValue, children]);
+
+  const renderErrorFallback = useCallback(() => {
+    if (!errorFallback) {
+      return null;
+    }
+
+    if (isFunction(errorFallback)) {
+      return (errorFallback as (
+        err: Error,
+        state: DataLayoutProps<Data>
+      ) => React.ReactNode)(contextValue.error as Error, contextValue);
+    }
+
+    return React.Children.only(errorFallback);
+  }, [contextValue, errorFallback]);
 
   return (
     <DataLayoutProvider value={contextValue}>
