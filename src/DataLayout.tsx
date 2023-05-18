@@ -21,7 +21,13 @@ export function computeDisplayDecision<D>(
   }
 ) {
   const { preserveDataOnError } = config;
-  const { isLoading, isLoadingInShadow, error, initialDataLoaded, data } = context;
+  const {
+    isLoading,
+    isLoadingInShadow,
+    error,
+    initialDataLoaded,
+    data,
+  } = context;
 
   // TODO: always show loading indicator when data is not available
   const showLoadingIndicator =
