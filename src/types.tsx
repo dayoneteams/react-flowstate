@@ -28,11 +28,8 @@ export interface DataLayoutComputedProps<Data> {
   /** The initial values of the layout */
   readonly initialData: Data;
 
-  /** Indicate whether data source has been called and successfully returned data */
-  readonly isFirstFetchSuccess: boolean;
-
-  /** Last time when data was successfully fetched */
-  readonly lastSuccessfulFetch: Date;
+  /** Last time when data was successfully fetched, null if datasource not yet fetched */
+  readonly lastFetchSuccessAt: Date;
 }
 
 /**
@@ -55,11 +52,6 @@ export type RenderFunction<Props = undefined> = (
  */
 export interface DataLayoutConfig<Data> {
   initialData?: Data;
-
-  /**
-   * UI component to render
-   */
-  component?: React.ComponentType<DataLayoutProps<Data>> | React.ReactNode;
 
   /**
    * React children or child render callback
@@ -103,4 +95,19 @@ export interface DataLayoutConfig<Data> {
   errorFallback?:
     | ((err: Error, state: DataLayoutProps<Data>) => React.ReactNode)
     | React.ReactNode;
+
+  /**
+   * UI that is only rendered when data is available
+   */
+  dataFallback?: DataLayoutRenderFunction<Data> | React.ReactNode;
+}
+
+/**
+ * <DataFallback /> props
+ */
+export interface DataFallbackProps<Data> {
+  /**
+   * React children or child render callback
+   */
+  children?: DataLayoutRenderFunction<Data> | React.ReactNode;
 }

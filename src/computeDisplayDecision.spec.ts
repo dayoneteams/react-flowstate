@@ -1,5 +1,5 @@
 import { describe, test } from '@jest/globals';
-import { computeDisplayDecision } from './DataLayout';
+import { computeDisplayDecision } from './computeDisplayDecision';
 
 describe('DataLayout', () => {
   describe('computeDisplayDecision()', () => {
@@ -17,7 +17,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: true,
-        showDataContent: false,
+        showDataFallback: false,
         showErrorFallback: false,
       });
     });
@@ -36,7 +36,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: true,
-        showDataContent: false,
+        showDataFallback: false,
         showErrorFallback: false,
       });
 
@@ -54,7 +54,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: true,
-        showDataContent: false,
+        showDataFallback: false,
         showErrorFallback: false,
       });
     });
@@ -73,7 +73,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: true,
-        showDataContent: false,
+        showDataFallback: false,
         showErrorFallback: false,
       });
     });
@@ -92,7 +92,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: false,
-        showDataContent: true,
+        showDataFallback: true,
         showErrorFallback: false,
       });
     });
@@ -111,7 +111,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: false,
-        showDataContent: false,
+        showDataFallback: false,
         showErrorFallback: true,
       });
     });
@@ -130,7 +130,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: false,
-        showDataContent: false,
+        showDataFallback: false,
         showErrorFallback: true,
       });
     });
@@ -149,7 +149,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: false,
-        showDataContent: true,
+        showDataFallback: true,
         showErrorFallback: false,
       });
     });
@@ -168,7 +168,7 @@ describe('DataLayout', () => {
         )
       ).toEqual({
         showLoadingIndicator: false,
-        showDataContent: true,
+        showDataFallback: true,
         showErrorFallback: false,
       });
     });

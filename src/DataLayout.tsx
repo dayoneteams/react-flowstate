@@ -8,42 +8,7 @@ import {
 import { isFunction } from './utils';
 import { DataLayoutProvider } from './DataLayoutContext';
 import { useDataLayout } from './useDataLayout';
-
-// TODO: Need refactoring for args.
-export function computeDisplayDecision<D>(
-  config: { preserveDataOnError?: boolean },
-  context: {
-    isLoading: boolean;
-    isLoadingInShadow: boolean;
-    error: Error | null;
-    initialDataLoaded: boolean;
-    data: D;
-  }
-) {
-  const { preserveDataOnError } = config;
-  const {
-    isLoading,
-    isLoadingInShadow,
-    error,
-    initialDataLoaded,
-    data,
-  } = context;
-
-  // TODO: always show loading indicator when data is not available
-  const showLoadingIndicator =
-    isLoading && (!data || !isLoadingInShadow || !!error || !initialDataLoaded);
-  const showErrorFallback =
-    !!error &&
-    !showLoadingIndicator &&
-    (!initialDataLoaded || !preserveDataOnError);
-  const showDataContent =
-    initialDataLoaded && !showErrorFallback && !showLoadingIndicator;
-  return {
-    showLoadingIndicator,
-    showDataContent,
-    showErrorFallback,
-  };
-}
+import { computeDisplayDecision } from './computeDisplayDecision';
 
 export function DataLayout<Data extends ResponseData = ResponseData>(
   props: DataLayoutConfig<Data>
