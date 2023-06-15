@@ -53,34 +53,37 @@ export default () => (
               </div>
             ))}
           </div>
-          <div className="mt-5 flex justify-center">
-            <button
-              onClick={() => reload()}
-              className="btn btn-primary"
-              disabled={isLoading}
-            >
-              Reload
-            </button>
-            &nbsp;
-            <button
-              onClick={() => reload({ shadow: true })}
-              disabled={isLoading}
-              className="btn btn-secondary"
-            >
-              Shadow Reload
-            </button>
-          </div>
         </div>
       )}
     >
-      {({ renderAutoFallback }) => (
+      {({ renderAutoFallback, reload, isLoading }) => (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <h4 className="text-2xl text-center mb-5">
-              Complex UI for custom children.
+              Here is the UI outside of the content.
             </h4>
+            <div className="mt-5 flex justify-center">
+              <button
+                onClick={() => reload()}
+                className="btn btn-primary"
+                disabled={isLoading}
+              >
+                Reload
+              </button>
+              &nbsp;
+              <button
+                onClick={() => reload({ shadow: true })}
+                disabled={isLoading}
+                className="btn btn-secondary"
+              >
+                Shadow Reload
+              </button>
+            </div>
           </div>
-          <div>{renderAutoFallback()}</div>
+          <div>
+            <h4 className="text-2xl text-center mb-5">Here is the content.</h4>
+            <div>{renderAutoFallback()}</div>
+          </div>
         </div>
       )}
     </DataLayout>

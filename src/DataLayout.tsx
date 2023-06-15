@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import {
   DataLayoutConfig,
   DataLayoutProps,
-  DataLayoutRenderFunction,
+  DataFallbackRenderFunction,
   ResponseData,
 } from './types';
 import { isFunction } from './utils';
@@ -18,6 +18,7 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     children,
     loadingIndicator,
     errorFallback,
+    dataFallback,
     preserveDataOnError,
   } = props;
   const {
@@ -29,7 +30,7 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
   } = contextValue;
   const {
     showLoadingIndicator,
-    showDataContent,
+    showDataFallback,
     showErrorFallback,
   } = useMemo(
     () =>
@@ -59,17 +60,21 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     return React.Children.only(loadingIndicator);
   }, [loadingIndicator]);
 
-  const renderDataContent = useCallback(() => {
-    if (!children) {
+  const renderDataFallback = useCallback(() => {
+    const finalDataFallback = dataFallback || children;
+
+    if (!finalDataFallback) {
       return null;
     }
 
-    if (isFunction(children)) {
-      return (children as DataLayoutRenderFunction<Data>)(contextValue);
+    if (isFunction(finalDataFallback)) {
+      return (finalDataFallback as DataFallbackRenderFunction<Data>)(
+        contextValue
+      );
     }
 
-    return React.Children.only(children);
-  }, [contextValue, children]);
+    return React.Children.only(finalDataFallback);
+  }, [contextValue, children, dataFallback]);
 
   const renderErrorFallback = useCallback(() => {
     if (!errorFallback) {
@@ -86,13 +91,45 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     return React.Children.only(errorFallback);
   }, [contextValue, errorFallback]);
 
+  const renderAutoFallback = useCallback(() => {
+    return showErrorFallback
+      ? renderErrorFallback()
+      : showLoadingIndicator
+      ? renderLoadingIndicator()
+      : showDataFallback && renderDataFallback();
+  }, [
+    showErrorFallback,
+    showLoadingIndicator,
+    showDataFallback,
+    renderErrorFallback,
+    renderLoadingIndicator,
+    renderDataFallback,
+  ]);
+
+  // dataFallback + children => render children as children
+  //   children is react node => render children as react node
+  //   children is render function => render children as render function with renderAutoFallback() method injected
+  // !dataFallback + children => render children as datafallback
+  // !dataFallback + !children => warning
+
+  const renderChildren = useCallback(() => {
+    if (!children) {
+      return null;
+    }
+
+    if (isFunction(children)) {
+      return children({
+        ...contextValue,
+        renderAutoFallback,
+      });
+    }
+
+    return React.Children.only(children);
+  }, [contextValue, children, renderAutoFallback]);
+
   return (
     <DataLayoutProvider value={contextValue}>
-      {showErrorFallback
-        ? renderErrorFallback()
-        : showLoadingIndicator
-        ? renderLoadingIndicator()
-        : showDataContent && renderDataContent()}
+      {children && dataFallback ? renderChildren() : renderAutoFallback()}
     </DataLayoutProvider>
   );
 }

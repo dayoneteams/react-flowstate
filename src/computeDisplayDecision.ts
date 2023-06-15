@@ -32,7 +32,3 @@ export function computeDisplayDecision<D>(
     showErrorFallback,
   };
 }
-
-export const toAddressString = ({ zipCode, street, house }) => {
-  return [house, street, zipCode].join(', ');
-};

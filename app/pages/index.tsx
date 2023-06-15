@@ -5,7 +5,8 @@ const LINKS = [
   { label: 'Basic', url: '/basic' },
   { label: 'Initial data', url: '/initial-data' },
   { label: 'Shadow reload', url: '/shadow-reload' },
-  { label: 'Preserve data on error', url: '/preserva-data-on-error' },
+  { label: 'Preserve data on error', url: '/preserve-data-on-error' },
+  { label: 'Custom children', url: '/custom-children' },
 ];
 const App = () => (
   <div className="container mx-auto p-4">

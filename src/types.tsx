@@ -13,6 +13,13 @@ export interface DataLayoutHelpers {
   reload: (options?: { shadow: boolean }) => void;
 }
 
+/**
+ * Helpers functions to manually control DataLayout.
+ */
+export type DataLayoutPropsWithRenderHelpers<Data> = DataLayoutProps<Data> & {
+  renderAutoFallback: () => React.ReactNode;
+};
+
 export type DataLayoutState<Data> = {
   data: Data | null;
   isLoading: boolean;
@@ -39,7 +46,7 @@ export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
 
 export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
-export type DataLayoutRenderFunction<Data> = RenderFunction<
+export type DataFallbackRenderFunction<Data> = RenderFunction<
   DataLayoutProps<Data>
 >;
 
@@ -56,7 +63,10 @@ export interface DataLayoutConfig<Data> {
   /**
    * React children or child render callback
    */
-  children?: DataLayoutRenderFunction<Data> | React.ReactNode;
+  children?:
+    | ((props: DataLayoutProps<Data>) => React.ReactNode)
+    | ((props: DataLayoutPropsWithRenderHelpers<Data>) => React.ReactNode)
+    | React.ReactNode;
 
   /**
    * Function that fetch data
@@ -99,15 +109,5 @@ export interface DataLayoutConfig<Data> {
   /**
    * UI that is only rendered when data is available
    */
-  dataFallback?: DataLayoutRenderFunction<Data> | React.ReactNode;
-}
-
-/**
- * <DataFallback /> props
- */
-export interface DataFallbackProps<Data> {
-  /**
-   * React children or child render callback
-   */
-  children?: DataLayoutRenderFunction<Data> | React.ReactNode;
+  dataFallback?: DataFallbackRenderFunction<Data> | React.ReactNode;
 }
