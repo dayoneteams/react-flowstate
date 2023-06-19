@@ -62,6 +62,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   shadowReload = false,
   preserveDataOnError = false,
   onError,
+  dependencies,
 }: DataLayoutConfig<Data>) {
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
@@ -109,6 +110,10 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
       loadData();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    reload();
+  }, [...(dependencies || [])]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const context: DataLayoutContextType<Data> = {
     data: state.data,

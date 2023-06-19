@@ -9,7 +9,7 @@ interface ItemType {
   websiteUrl: string;
 }
 
-const REACT_LIBRARIES: ItemType[] = [
+export const REACT_LIBRARIES: ItemType[] = [
   {
     name: 'React Router',
     description:

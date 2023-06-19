@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { DependencyList } from 'react';
 
 /**
  * Data returned from DataSource
@@ -72,6 +73,11 @@ export interface DataLayoutConfig<Data> {
    * Function that fetch data
    */
   dataSource: () => Promise<Data>;
+
+  /**
+   * If present, dataSource is reloaded if the values in the list change.
+   */
+  dependencies?: DependencyList;
 
   /**
    * React component to render loading UI

@@ -96,13 +96,13 @@ export default () => (
                         </div>
                       }
                     >
-                      {({ data, isLoading }) => (
+                      {({ data, isLoading, reload }) => (
                         <div>
-                          <div className="flex justify-between">
+                          <div className="flex justify-between mb-2">
                             <h2 className="card-title">User order history</h2>
                             <button
                               disabled={isLoading}
-                              onClick={() => {}}
+                              onClick={() => reload()}
                               className="btn btn-sm btn-primary"
                             >
                               Reload

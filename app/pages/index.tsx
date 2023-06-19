@@ -7,6 +7,7 @@ const LINKS = [
   { label: 'Shadow reload', url: '/shadow-reload' },
   { label: 'Preserve data on error', url: '/preserve-data-on-error' },
   { label: 'Custom children', url: '/custom-children' },
+  { label: 'Layout nesting', url: '/layout-nesting' },
 ];
 const App = () => (
   <div className="container mx-auto p-4">
