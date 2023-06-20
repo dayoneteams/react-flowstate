@@ -106,12 +106,6 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     renderDataFallback,
   ]);
 
-  // dataFallback + children => render children as children
-  //   children is react node => render children as react node
-  //   children is render function => render children as render function with renderAutoFallback() method injected
-  // !dataFallback + children => render children as datafallback
-  // !dataFallback + !children => warning
-
   const renderChildren = useCallback(() => {
     if (!children) {
       return null;
@@ -127,6 +121,11 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     return React.Children.only(children);
   }, [contextValue, children, renderAutoFallback]);
 
+  // dataFallback + children => render children as children
+  //   children is react node => render children as react node
+  //   children is render function => render children as render function with renderAutoFallback() method injected
+  // !dataFallback + children => render children as datafallback
+  // !dataFallback + !children => warning
   return (
     <DataLayoutProvider value={contextValue}>
       {children && dataFallback ? renderChildren() : renderAutoFallback()}

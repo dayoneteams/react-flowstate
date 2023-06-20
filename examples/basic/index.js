@@ -10,27 +10,39 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import sampleSize from 'lodash.sampleSize';
 
+const REACT_LIBS = [
+  {
+    name: 'React Router',
+    websiteUrl: 'https://reactrouter.com/',
+  },
+  {
+    name: 'Material-UI',
+    websiteUrl: 'https://mui.com/',
+  },
+  {
+    name: 'Next.js',
+    websiteUrl: 'https://nextjs.org/',
+  },
+  {
+    name: 'Redux',
+    description:
+      'A predictable state container for JavaScript apps, providing a centralized store for managing application state.',
+    websiteUrl: 'https://redux.js.org/',
+  },
+  {
+    name: 'Axios',
+    description:
+      'A library for making HTTP requests from JavaScript applications, offering a simple API for sending and receiving data from APIs.',
+    websiteUrl: 'https://axios-http.com/',
+  },
+];
+const SIZE = 4;
 const fetchFn = () =>
   new Promise(resolve =>
-    setTimeout(
-      () =>
-        resolve([
-          {
-            name: 'React Router',
-            websiteUrl: 'https://reactrouter.com/',
-          },
-          {
-            name: 'Material-UI',
-            websiteUrl: 'https://mui.com/',
-          },
-          {
-            name: 'Next.js',
-            websiteUrl: 'https://nextjs.org/',
-          },
-        ]),
-      1000
-    )
+    setTimeout(() => resolve(sampleSize(REACT_LIBS, SIZE)), 1000)
   );
 
 const Basic = () => (
@@ -66,11 +78,21 @@ const Basic = () => (
               </Grid>
             ))}
           </Grid>
-          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}
+          >
             <Button onClick={() => reload()} variant="contained">
               Reload
             </Button>
-          </Box>
+            <Button
+              onClick={() => reload({ shadow: true })}
+              variant="contained"
+            >
+              Shadow Reload
+            </Button>
+          </Stack>
         </Box>
       )}
     </DataLayout>
