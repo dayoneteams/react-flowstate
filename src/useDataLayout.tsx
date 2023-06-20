@@ -1,4 +1,4 @@
-import { Reducer, useCallback, useEffect, useReducer } from 'react';
+import { Reducer, useCallback, useEffect, useReducer, useRef } from 'react';
 import {
   DataLayoutConfig,
   DataLayoutContextType,
@@ -41,7 +41,6 @@ export function dataLayoutReducer<Data>(
         ...state,
         ...CLEAR_LOADING,
         ...CLEAR_ERROR,
-        initialDataLoaded: true,
         data: action.payload,
       };
     case 'LOAD_FAILURE':
@@ -64,17 +63,17 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   onError,
   dependencies,
 }: DataLayoutConfig<Data>) {
+  const initialDataLoadedRef = useRef(!!initialData);
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
   >(dataLayoutReducer, {
-    initialDataLoaded: !!initialData,
     data: initialData || null,
     error: null,
     isLoading: !initialData,
     isLoadingInShadow: !initialData && shadowReload,
   });
 
-  const { initialDataLoaded, error, isLoading, isLoadingInShadow } = state;
+  const { error, isLoading, isLoadingInShadow } = state;
 
   const loadData = useCallback(
     async (shadow = false) => {
@@ -106,7 +105,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   );
 
   useEffect(() => {
-    if (!initialDataLoaded) {
+    if (!initialDataLoadedRef.current) {
       loadData();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -118,7 +117,6 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const context: DataLayoutContextType<Data> = {
     data: state.data,
     error,
-    initialDataLoaded,
     isLoading,
     isLoadingInShadow,
     reload,

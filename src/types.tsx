@@ -26,7 +26,6 @@ export type DataLayoutState<Data> = {
   isLoading: boolean;
   isLoadingInShadow: boolean;
   error: Error | null;
-  initialDataLoaded: boolean;
 };
 
 /**

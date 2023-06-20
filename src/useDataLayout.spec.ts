@@ -7,7 +7,6 @@ describe('useDataLayout', () => {
       expect(
         dataLayoutReducer(
           {
-            initialDataLoaded: true,
             data: {},
             error: new Error('mocked error'),
             isLoading: false,
@@ -19,7 +18,6 @@ describe('useDataLayout', () => {
           }
         )
       ).toEqual({
-        initialDataLoaded: true,
         data: null,
         error: null,
         isLoading: true,
@@ -29,7 +27,6 @@ describe('useDataLayout', () => {
       expect(
         dataLayoutReducer(
           {
-            initialDataLoaded: true,
             data: {},
             error: new Error('mocked error'),
             isLoading: false,
@@ -41,7 +38,6 @@ describe('useDataLayout', () => {
           }
         )
       ).toEqual({
-        initialDataLoaded: true,
         data: {},
         error: null,
         isLoading: true,
@@ -53,7 +49,6 @@ describe('useDataLayout', () => {
       expect(
         dataLayoutReducer(
           {
-            initialDataLoaded: true,
             data: [1, 2, 3],
             error: null,
             isLoading: true,
@@ -65,7 +60,6 @@ describe('useDataLayout', () => {
           }
         )
       ).toEqual({
-        initialDataLoaded: true,
         data: [1, 2, 3],
         error: null,
         isLoading: true,
@@ -77,7 +71,6 @@ describe('useDataLayout', () => {
       expect(
         dataLayoutReducer(
           {
-            initialDataLoaded: false,
             data: null,
             error: new Error('mocked error'),
             isLoading: true,
@@ -89,7 +82,6 @@ describe('useDataLayout', () => {
           }
         )
       ).toEqual({
-        initialDataLoaded: true,
         data: { items: [1, 2, 3] },
         error: null,
         isLoading: false,
@@ -101,7 +93,6 @@ describe('useDataLayout', () => {
       expect(
         dataLayoutReducer<number[]>(
           {
-            initialDataLoaded: true,
             data: [1, 2, 3],
             error: null,
             isLoading: true,
@@ -113,7 +104,6 @@ describe('useDataLayout', () => {
           }
         )
       ).toEqual({
-        initialDataLoaded: true,
         data: null,
         error: new Error('error'),
         isLoading: false,
@@ -125,7 +115,6 @@ describe('useDataLayout', () => {
       expect(
         dataLayoutReducer<number[]>(
           {
-            initialDataLoaded: true,
             data: [1, 2, 3],
             error: null,
             isLoading: true,
@@ -137,7 +126,6 @@ describe('useDataLayout', () => {
           }
         )
       ).toEqual({
-        initialDataLoaded: true,
         data: [1, 2, 3],
         error: new Error('error'),
         isLoading: false,

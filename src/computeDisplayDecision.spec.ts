@@ -11,7 +11,6 @@ describe('DataLayout', () => {
             isLoading: true,
             isLoadingInShadow: false,
             error: null,
-            initialDataLoaded: true,
             data: null,
           }
         )
@@ -30,7 +29,6 @@ describe('DataLayout', () => {
             isLoading: true,
             isLoadingInShadow: false,
             error: null,
-            initialDataLoaded: false,
             data: null,
           }
         )
@@ -48,7 +46,6 @@ describe('DataLayout', () => {
             isLoading: true,
             isLoadingInShadow: true,
             error: null,
-            initialDataLoaded: false,
             data: null,
           }
         )
@@ -67,7 +64,6 @@ describe('DataLayout', () => {
             isLoading: true,
             isLoadingInShadow: true,
             error: new Error('mocked error'),
-            initialDataLoaded: true,
             data: null,
           }
         )
@@ -86,7 +82,6 @@ describe('DataLayout', () => {
             isLoading: true,
             isLoadingInShadow: true,
             error: null,
-            initialDataLoaded: true,
             data: [1, 2, 3],
           }
         )
@@ -105,7 +100,6 @@ describe('DataLayout', () => {
             isLoading: false,
             isLoadingInShadow: false,
             error: new Error('api error'),
-            initialDataLoaded: true,
             data: null,
           }
         )
@@ -124,7 +118,6 @@ describe('DataLayout', () => {
             isLoading: false,
             isLoadingInShadow: false,
             error: new Error('api error'),
-            initialDataLoaded: false,
             data: null,
           }
         )
@@ -143,7 +136,6 @@ describe('DataLayout', () => {
             isLoading: false,
             isLoadingInShadow: false,
             error: new Error('api error'),
-            initialDataLoaded: true,
             data: [1, 2, 3],
           }
         )
@@ -162,7 +154,6 @@ describe('DataLayout', () => {
             isLoading: false,
             isLoadingInShadow: false,
             error: null,
-            initialDataLoaded: true,
             data: [1, 2, 3],
           }
         )

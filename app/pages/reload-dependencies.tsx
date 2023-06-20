@@ -6,7 +6,9 @@ export default () => {
   const [searchKey, setSearchKey] = useState('');
   const fetchDataFn = () =>
     Promise.resolve(
-      REACT_LIBRARIES.filter(reactLib => reactLib.name.match(new RegExp(searchKey, 'gi')))
+      REACT_LIBRARIES.filter(reactLib =>
+        reactLib.name.match(new RegExp(searchKey, 'gi'))
+      )
     );
 
   return (

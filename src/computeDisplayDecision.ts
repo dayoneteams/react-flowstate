@@ -4,28 +4,18 @@ export function computeDisplayDecision<D>(
     isLoading: boolean;
     isLoadingInShadow: boolean;
     error: Error | null;
-    initialDataLoaded: boolean;
     data: D;
   }
 ) {
   const { preserveDataOnError } = config;
-  const {
-    isLoading,
-    isLoadingInShadow,
-    error,
-    initialDataLoaded,
-    data,
-  } = context;
+  const { isLoading, isLoadingInShadow, error, data } = context;
 
   // TODO: always show loading indicator when data is not available
   const showLoadingIndicator =
-    isLoading && (!data || !isLoadingInShadow || !!error || !initialDataLoaded);
+    isLoading && (!data || !isLoadingInShadow || !!error);
   const showErrorFallback =
-    !!error &&
-    !showLoadingIndicator &&
-    (!initialDataLoaded || !preserveDataOnError);
-  const showDataFallback =
-    initialDataLoaded && !showErrorFallback && !showLoadingIndicator;
+    !!error && !showLoadingIndicator && (!preserveDataOnError || !data);
+  const showDataFallback = !showErrorFallback && !showLoadingIndicator;
   return {
     showLoadingIndicator,
     showDataFallback,
