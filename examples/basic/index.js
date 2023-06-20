@@ -11,7 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import sampleSize from 'lodash.sampleSize';
+import sampleSize from 'lodash.samplesize';
 
 const REACT_LIBS = [
   {
