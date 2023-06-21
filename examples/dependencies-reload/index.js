@@ -63,8 +63,8 @@ const Basic = () => {
       </Typography>
       <Box>
         <TextField
-          label="Type to search, e.g: redux"
-          variant="standard"
+          placeholder="e.g: redux"
+          variant="outlined"
           value={searchKeyword}
           onChange={e => {
             setSearchKeyword(e.target.value);
