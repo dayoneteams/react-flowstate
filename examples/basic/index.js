@@ -15,6 +15,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import Paper from '@mui/material/Paper';
 import sampleSize from 'lodash.samplesize';
 
 const REACT_LIBS = [
@@ -96,7 +97,7 @@ const Basic = () => {
         )}
       >
         {({ data, reload }) => (
-          <Box>
+          <Paper sx={{ p: 3, mt: 3 }}>
             <Grid container spacing={2}>
               {data.map((jsLib, index) => (
                 <Grid key={index} item xs={12}>
@@ -118,7 +119,7 @@ const Basic = () => {
             <Stack
               direction="row"
               spacing={1}
-              sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}
+              sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}
             >
               <Button onClick={() => reload()} variant="contained">
                 Reload
@@ -130,7 +131,7 @@ const Basic = () => {
                 Shadow Reload
               </Button>
             </Stack>
-          </Box>
+          </Paper>
         )}
       </DataLayout>
     </Container>
