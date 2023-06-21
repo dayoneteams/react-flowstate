@@ -25,10 +25,9 @@
     "test": "jest",
     "lint": "tsdx lint src app examples",
     "lint:fix": "tsdx lint src app examples --fix",
-    "prepare": "tsdx build",
+    "prepare": "npm run lint && npm run test && npm run build",
     "size": "size-limit",
-    "analyze": "size-limit --why",
-    "prepublish": "npm run lint && npm run test"
+    "analyze": "size-limit --why"
   },
   "peerDependencies": {
     "react": ">=16.8.0"
