@@ -53,6 +53,15 @@ Running the `build` task will output into `/dist` multiple module formats (CJS &
 npm run build
 ```
 
+## CodeSandbox Examples
+CodeSandbox examples are stored inside `examples` folder.
+To create new example (highly welcomed), just duplicate the `examples/basic` into another folder name and start working on it.
+To test an example right in devices.
+```
+npx parcel serve examples/example-x/index.html
+```
+Check example code at http://localhost:1234
+
 ## Bundle analysis
 Calculates the real cost of your library using [size-limit](https://github.com/ai/size-limit) with `npm run size` and visulize it with `npm run analyze`.
 

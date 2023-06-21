@@ -21,13 +21,7 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     dataFallback,
     preserveDataOnError,
   } = props;
-  const {
-    isLoading,
-    isLoadingInShadow,
-    error,
-    initialDataLoaded,
-    data,
-  } = contextValue;
+  const { isLoading, isLoadingInShadow, error, data } = contextValue;
   const {
     showLoadingIndicator,
     showDataFallback,
@@ -36,16 +30,9 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     () =>
       computeDisplayDecision(
         { preserveDataOnError },
-        { isLoading, isLoadingInShadow, error, initialDataLoaded, data }
+        { isLoading, isLoadingInShadow, error, data }
       ),
-    [
-      preserveDataOnError,
-      isLoading,
-      isLoadingInShadow,
-      error,
-      initialDataLoaded,
-      data,
-    ]
+    [preserveDataOnError, isLoading, isLoadingInShadow, error, data]
   );
 
   const renderLoadingIndicator = useCallback(() => {

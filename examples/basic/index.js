@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { DataLayout } from 'react-flowstate';
 import Button from '@mui/material/Button';
@@ -11,6 +11,10 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import sampleSize from 'lodash.samplesize';
 
 const REACT_LIBS = [
@@ -40,63 +44,97 @@ const REACT_LIBS = [
   },
 ];
 const SIZE = 4;
-const fetchFn = () =>
+const fetchSuccess = () =>
   new Promise(resolve =>
     setTimeout(() => resolve(sampleSize(REACT_LIBS, SIZE)), 1000)
   );
+const fetchError = () =>
+  new Promise((resolve, reject) =>
+    setTimeout(
+      () => reject(new Error('[mocked error] failed to fetch data')),
+      1000
+    )
+  );
 
-const Basic = () => (
-  <Container>
-    <Typography variant="h5" textAlign="center" marginBottom={2}>
-      Basic Example
-    </Typography>
-    <DataLayout
-      dataSource={fetchFn}
-      loadingIndicator={() => (
-        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
-          <CircularProgress />
-        </Box>
-      )}
-    >
-      {({ data, reload }) => (
-        <Box>
-          <Grid container spacing={2}>
-            {data.map((jsLib, index) => (
-              <Grid key={index} item xs={12}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      {jsLib.name}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button href={jsLib.websiteUrl} size="small">
-                      Learn More
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}
-          >
-            <Button onClick={() => reload()} variant="contained">
-              Reload
-            </Button>
+const Basic = () => {
+  const [throwError, setThrowError] = useState(false);
+
+  return (
+    <Container>
+      <Typography variant="h5" textAlign="center" marginBottom={2}>
+        Basic Example
+      </Typography>
+      <Box>
+        <FormControlLabel
+          control={<Switch color="error" checked={throwError} />}
+          label="Throw error in next fetch"
+          onChange={e => {
+            setThrowError(e.target.checked);
+          }}
+        />
+      </Box>
+      <DataLayout
+        dataSource={throwError ? fetchError : fetchSuccess}
+        loadingIndicator={() => (
+          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        )}
+        errorFallback={(e, { reload }) => (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            {e.message}
             <Button
-              onClick={() => reload({ shadow: true })}
+              onClick={() => reload()}
               variant="contained"
+              sx={{ ml: 1 }}
+              color="error"
             >
-              Shadow Reload
+              Try Again
             </Button>
-          </Stack>
-        </Box>
-      )}
-    </DataLayout>
-  </Container>
-);
+          </Alert>
+        )}
+      >
+        {({ data, reload }) => (
+          <Box>
+            <Grid container spacing={2}>
+              {data.map((jsLib, index) => (
+                <Grid key={index} item xs={12}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {jsLib.name}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button href={jsLib.websiteUrl} size="small">
+                        Learn More
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}
+            >
+              <Button onClick={() => reload()} variant="contained">
+                Reload
+              </Button>
+              <Button
+                onClick={() => reload({ shadow: true })}
+                variant="contained"
+              >
+                Shadow Reload
+              </Button>
+            </Stack>
+          </Box>
+        )}
+      </DataLayout>
+    </Container>
+  );
+};
 
 ReactDOM.render(<Basic />, document.getElementById('root'));
