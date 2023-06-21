@@ -10,7 +10,7 @@ Clone codebase and install dependencies.
 npm install
 ```
 
-### Bundling library and run test app server with live code update
+## Bundling library and run test app server with live code update
 Start build process in watch mode.
 ```
 npm start
@@ -28,12 +28,12 @@ To build and run test app on production mode
 npm run app:prod
 ```
 
-### Test
+## Automation Test
 ```
 npm run test
 ```
 
-### Code Lint
+## Code style
 Ensure your code is clean and there are no warnings or errors.
 
 To check lint issues.
@@ -56,9 +56,11 @@ npm run build
 ## CodeSandbox Examples
 CodeSandbox examples are stored inside `examples` folder.
 To create new example (highly welcomed), just duplicate the `examples/basic` into another folder name and start working on it.
-To test an example right in devices.
+To test the `examples/basic` right on local devices.
 ```
-npx parcel serve examples/example-x/index.html
+cd examples/basic
+npm i
+npx parcel serve index.html
 ```
 Check example code at http://localhost:1234
 
