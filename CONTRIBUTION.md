@@ -20,13 +20,11 @@ This builds to `/dist` and runs the project in watch mode so any edits you save 
 Open another terminal window and run the test app.
 ```
 npm run app
-```
-Check the test app on http://localhost:3000
 
-To build and run test app on production mode
-```
+# Or to build and run test app on production mode
 npm run app:prod
 ```
+Check the test app on http://localhost:3000
 
 ## Automation Test
 ```

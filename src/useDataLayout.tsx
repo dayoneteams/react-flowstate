@@ -1,4 +1,12 @@
-import { Reducer, useCallback, useEffect, useReducer, useRef } from 'react';
+import {
+  Reducer,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useMemo,
+} from 'react';
+import lodashDebounce from 'lodash.debounce';
 import {
   DataLayoutConfig,
   DataLayoutContextType,
@@ -61,6 +69,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   shadowReload = false,
   preserveDataOnError = false,
   onError,
+  debounceDelay,
   dependencies,
 }: DataLayoutConfig<Data>) {
   const initialDataLoadedRef = useRef(!!initialData);
@@ -82,7 +91,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
           type: 'LOAD_START',
           payload: { shadow: shadow || shadowReload },
         });
-        const fetchedData = await dataSource();
+        const fetchedData = await dataSource(dependencies);
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
         if (onError) {
@@ -94,7 +103,15 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         });
       }
     },
-    [dataSource, dispatch, onError, state, shadowReload, preserveDataOnError]
+    [
+      dataSource,
+      dispatch,
+      onError,
+      state,
+      shadowReload,
+      preserveDataOnError,
+      dependencies,
+    ]
   );
 
   const reload = useCallback(
@@ -104,6 +121,11 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     [loadData, shadowReload]
   );
 
+  const debouncedReload = useMemo(
+    () => lodashDebounce(reload, debounceDelay || 0),
+    [debounceDelay, reload]
+  );
+
   useEffect(() => {
     if (!initialDataLoadedRef.current) {
       loadData();
@@ -111,8 +133,12 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    reload();
-  }, [...(dependencies || [])]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (debounceDelay && debounceDelay > 0) {
+      debouncedReload();
+    } else {
+      reload();
+    }
+  }, [...(dependencies || []), debounceDelay]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const context: DataLayoutContextType<Data> = {
     data: state.data,

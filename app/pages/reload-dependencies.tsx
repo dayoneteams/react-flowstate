@@ -4,12 +4,6 @@ import { REACT_LIBRARIES } from '@/data';
 
 export default () => {
   const [searchKey, setSearchKey] = useState('');
-  const fetchDataFn = () =>
-    Promise.resolve(
-      REACT_LIBRARIES.filter(reactLib =>
-        reactLib.name.match(new RegExp(searchKey, 'gi'))
-      )
-    );
 
   return (
     <div className="container mx-auto p-4">
@@ -28,7 +22,13 @@ export default () => {
       </div>
       <DataLayout
         dependencies={[searchKey]}
-        dataSource={fetchDataFn}
+        dataSource={([searchKey]) =>
+          Promise.resolve(
+            REACT_LIBRARIES.filter(reactLib =>
+              reactLib.name.match(new RegExp(searchKey as string, 'gi'))
+            )
+          )
+        }
         loadingIndicator={() => (
           <div className="text-center">
             <progress className="progress progress-accent w-56" />

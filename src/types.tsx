@@ -71,12 +71,17 @@ export interface DataLayoutConfig<Data> {
   /**
    * Function that fetch data
    */
-  dataSource: () => Promise<Data>;
+  dataSource: (deps?: DependencyList) => Promise<Data>;
 
   /**
    * If present, dataSource is reloaded if the values in the list change.
    */
   dependencies?: DependencyList;
+
+  /**
+   * If present, dependency changes are debounced hence reload is debounced.
+   */
+  debounceDelay?: number;
 
   /**
    * React component to render loading UI
