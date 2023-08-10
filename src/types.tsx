@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { DependencyList } from 'react';
+import React, { DependencyList } from 'react';
 
 /**
  * Data returned from DataSource
@@ -64,8 +63,9 @@ export interface DataLayoutConfig<Data> {
    * React children or child render callback
    */
   children?:
-    | ((props: DataLayoutProps<Data>) => React.ReactNode)
-    | ((props: DataLayoutPropsWithRenderHelpers<Data>) => React.ReactNode)
+    | ((
+        props: DataLayoutProps<Data> | DataLayoutPropsWithRenderHelpers<Data>
+      ) => React.ReactNode)
     | React.ReactNode;
 
   /**
