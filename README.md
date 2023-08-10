@@ -1,7 +1,12 @@
 # react-flowstate
 
-Say goodbye to a lot of repetitive `useState` and `useEffect` when dealing with data.
-Put your mind in flow-state.
+```
+useState and useEffect, they're so lame
+They're making me mad, I'm gonna change the game
+react-flowstate, the library that's gonna make you feel sane
+So say goodbye to those two, and let's get this party started!
+This is from Google Bard - don't like it? Just send your PR!
+```
 
 <p align="center">
   <a href="https://github.com/dayoneteams/react-flowstate/tree/main/examples">Examples</a>
@@ -10,10 +15,9 @@ Put your mind in flow-state.
 ### Features
 
 - Dead simple to use.
-- Automatically manage data lifecycle and display condition.
-- Reload data on dependency change with debounce support.
-- Supports React Native.
-- Supports Typescript.
+- Automatically manages data lifecycle and display condition.
+- Reloads data on dependency change with debounce support.
+- Supports React Native and TypeScript.
 
 ### Install
 ```
@@ -32,7 +36,7 @@ function App() {
       loadingIndicator={() => (
         <div>Loading ...</div>
       )}
-      errorFallback={(err, { reload, isLoading }) => (
+      errorFallback={(err) => (
         <div>{err.message}</div>
       )}
     >

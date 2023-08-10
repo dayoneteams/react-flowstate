@@ -43,19 +43,6 @@ const REACT_LIBS = [
 const Basic = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
-  const fetchSuccess = () =>
-    new Promise(resolve =>
-      setTimeout(
-        () =>
-          resolve(
-            REACT_LIBS.filter(lib =>
-              lib.name.match(new RegExp(searchKeyword, 'gi'))
-            )
-          ),
-        1000
-      )
-    );
-
   return (
     <Container>
       <Typography variant="h5" textAlign="center" marginBottom={2}>
@@ -73,7 +60,20 @@ const Basic = () => {
       </Box>
       <DataLayout
         dependencies={[searchKeyword]}
-        dataSource={fetchSuccess}
+        debounceDelay={1000}
+        dataSource={([searchKeyword]) =>
+          new Promise(resolve =>
+            setTimeout(
+              () =>
+                resolve(
+                  REACT_LIBS.filter(lib =>
+                    lib.name.match(new RegExp(searchKeyword, 'gi'))
+                  )
+                ),
+              1000
+            )
+          )
+        }
         loadingIndicator={() => (
           <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
