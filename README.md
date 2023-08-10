@@ -12,20 +12,20 @@ This is from Google Bard. Don't like it? Send your PR!
   <a href="https://github.com/dayoneteams/react-flowstate/tree/main/examples">Examples</a>
 </p>
 
-### Features
+## Features
 
 - Dead simple to use.
 - Automatically manages data lifecycle and display condition.
 - Reloads data on dependency change with debounce support.
 - Supports React Native and TypeScript.
 
-### Install
+## Install
 
 ```
 npm install react-flowstate
 ```
 
-### Quickstart
+## Quickstart
 
 ```tsx
 import {DataLayout} from 'react-flowstate';
@@ -49,32 +49,73 @@ function App() {
 }
 ```
 
-### API Reference
+## API Reference
 
-#### <DataLayout /> component
+### ``<DataLayout />``
 
-`<DataLayout />` is a component that helps you with controlling data fetching
-and
-display.
+Component that helps you with controlling data fetching and display.
 
-##### Props
+#### Props
 
-###### **initialData?: Data**
+#### **initialData?: Data**
 
 - Supply this value will set initial data and skip initial loading.
 
-###### **children?: ReactNode | (props: DataLayoutProps<Data>) => ReactNode**
+#### **children?: ReactNode | (props: DataLayoutProps<Data>) => ReactNode**
 
 - If `dataFallback` prop is not supplied, `children` will act as `DataFallback`
 - If `dataFallback` prop is supplied, `children` will act as a dynamic view that
   allows us to dynamically render whatever we want.
 
-dataSource
-dependencies
-debounceDelay
-loadingIndicator
-shadowReload
-preserveDataOnError
-onError
-errorFallback
-dataFallback
+#### **dataSource: (deps?: DependencyList) => Promise<Data>**
+
+- Query function that fetches data and return a Promise.
+- It is passed an optional dependency list that triggers reload behavior.
+
+#### **dependencies?: DependencyList**
+
+- If present, data will be reloaded if the values in the list change.
+
+#### **debounceDelay?: number;**
+
+- The number of milliseconds to delay invoking `dataSource` reload behavior.
+- If not present, any changes to `dependendcies` prop will trigger reload
+  behavior
+  and may affect the performance.
+
+#### **loadingIndicator?: RenderFunction | React.ReactNode**
+
+- Render loading UI
+
+#### **shadowReload?: boolean**
+
+- Default: `false`
+
+- If `shadowReload` is true, the reload behavior will keep current displayed
+  data
+  UI as-is and not showing loading indicator.
+  However, if there is no existing data being display, loading indicator is
+  still
+  shown.
+
+#### **preserveDataOnError?: boolean**
+
+- Default: `false`
+- If `preserveDataOnError` is `false` and query function failed to fetch new
+  data, current existing data will be set to be `null` and `errorFallback` will
+  be displayed.
+- Set `preserveDataOnError` to be `true` preserve existing data even if the
+  query failed. Can be use together with `onError` prop to show the error
+  message to user (e.g: using `toarst` or `alert()`).
+
+#### **onError?: (err: Error, state: DataLayoutState<Data>) => unknown**
+
+- Callback function invoked when `dataSource` fails to fetch data.
+
+#### **errorFallback?: ((err: Error, state: DataLayoutProps<Data>) => React.ReactNode) | React.ReactNode**
+
+- Render error UI
+
+#### **dataFallback?: DataFallbackRenderFunction<Data> | React.ReactNode**
+
+- Render data UI
