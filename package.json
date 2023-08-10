@@ -1,6 +1,6 @@
 {
   "name": "react-flowstate",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Get rid of useEffect, useState for data fetching and loading indicator.",
   "author": "Hao Tang <haotang.io@gmail.com> (https://dayoneteams.com)",
   "repository": {
