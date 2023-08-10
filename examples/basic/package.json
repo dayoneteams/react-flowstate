@@ -10,7 +10,7 @@
     "lodash.samplesize": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-flowstate": "1.0.3"
+    "react-flowstate": "latest"
   },
   "devDependencies": {
     "process": "^0.11.10"

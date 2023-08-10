@@ -32,18 +32,15 @@ npm run test
 ```
 
 ## Code style
-Ensure your code is clean and there are no warnings or errors.
-
-To check lint issues.
+Check lint issues.
 ```
 npm run lint
 ```
 
-To fix lint issues.
+Auto-fix lint issues.
 ```
 npm run lint:fix
 ```
-There are some issues that can't be auto-fixed that you need to resolve manually.
 
 ## Build
 Running the `build` task will output into `/dist` multiple module formats (CJS & ESM by default, and also UMD if you want) plus development and production builds.
