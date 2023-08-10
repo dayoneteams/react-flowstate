@@ -8,6 +8,7 @@ const LINKS = [
   { label: 'Preserve data on error', url: '/preserve-data-on-error' },
   { label: 'Custom children', url: '/custom-children' },
   { label: 'Layout nesting', url: '/layout-nesting' },
+  { label: 'Dependencies and reload', url: '/reload-dependencies' },
 ];
 const App = () => (
   <div className="container mx-auto p-4">

@@ -29,6 +29,7 @@ export default () => {
             )
           )
         }
+        debounceDelay={500}
         loadingIndicator={() => (
           <div className="text-center">
             <progress className="progress progress-accent w-56" />

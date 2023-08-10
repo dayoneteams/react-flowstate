@@ -4,7 +4,8 @@ import {
   useEffect,
   useReducer,
   useRef,
-  useMemo,
+  DependencyList,
+  useState,
 } from 'react';
 import lodashDebounce from 'lodash.debounce';
 import {
@@ -69,8 +70,8 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   shadowReload = false,
   preserveDataOnError = false,
   onError,
-  debounceDelay,
-  dependencies,
+  debounceDelay = 0,
+  dependencies = [],
 }: DataLayoutConfig<Data>) {
   const initialDataLoadedRef = useRef(!!initialData);
   const [state, dispatch] = useReducer<
@@ -81,11 +82,20 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     isLoading: !initialData,
     isLoadingInShadow: !initialData && shadowReload,
   });
+  const [debouncedDependencies, setDebouncedDependencies] = useState(
+    dependencies
+  );
+  const setDebouncedDepsRef = useRef(
+    lodashDebounce(setDebouncedDependencies, debounceDelay || 0)
+  );
+  useEffect(() => {
+    setDebouncedDepsRef.current(dependencies as DependencyList);
+  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { error, isLoading, isLoadingInShadow } = state;
 
   const loadData = useCallback(
-    async (shadow = false) => {
+    async (dependencies: DependencyList, shadow = false) => {
       try {
         dispatch({
           type: 'LOAD_START',
@@ -103,49 +113,27 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         });
       }
     },
-    [
-      dataSource,
-      dispatch,
-      onError,
-      state,
-      shadowReload,
-      preserveDataOnError,
-      dependencies,
-    ]
-  );
-
-  const reload = useCallback(
-    (options?: { shadow: boolean }) => {
-      loadData(options?.shadow || shadowReload);
-    },
-    [loadData, shadowReload]
-  );
-
-  const debouncedReload = useMemo(
-    () => lodashDebounce(reload, debounceDelay || 0),
-    [debounceDelay, reload]
+    [dataSource, dispatch, onError, state, shadowReload, preserveDataOnError]
   );
 
   useEffect(() => {
     if (!initialDataLoadedRef.current) {
-      loadData();
+      loadData(dependencies as DependencyList);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (debounceDelay && debounceDelay > 0) {
-      debouncedReload();
-    } else {
-      reload();
-    }
-  }, [...(dependencies || []), debounceDelay]); // eslint-disable-line react-hooks/exhaustive-deps
+    loadData(dependencies as DependencyList);
+  }, [debouncedDependencies]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const context: DataLayoutContextType<Data> = {
     data: state.data,
     error,
     isLoading,
     isLoadingInShadow,
-    reload,
+    reload: (options?: { shadow: boolean }) => {
+      loadData(dependencies as DependencyList, options?.shadow || shadowReload);
+    },
   };
 
   return context;
