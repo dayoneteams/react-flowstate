@@ -3,7 +3,7 @@ name: Unit test
 on:
     pull_request:
     push:
-      branches: [feature/add-ci]
+      branches: [main]
 
 jobs:
     test:
