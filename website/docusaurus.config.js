@@ -75,9 +75,9 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Docs',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/help', label: 'Help', position: 'left'},
           {
             href: 'https://github.com/dayoneteams/react-flowstate',
             label: 'GitHub',
@@ -116,7 +116,6 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Dayone Software Technology, Inc.`,
       },
       prism: {
         theme: lightCodeTheme,
