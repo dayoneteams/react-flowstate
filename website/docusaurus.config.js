@@ -68,7 +68,7 @@ const config = {
         title: 'React Flowstate',
         logo: {
           alt: 'React Flowstate Logo',
-          src: 'img/logo.svg',
+          src: 'img/logo.png',
         },
         items: [
           {
@@ -79,7 +79,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/dayoneteams/react-flowstate',
             label: 'GitHub',
             position: 'right',
           },
@@ -102,33 +102,21 @@ const config = {
             items: [
               {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
+                href: 'https://stackoverflow.com/questions/tagged/react-flowstate',
+              }
             ],
           },
           {
             title: 'More',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                label: 'By Dayone',
+                href: 'https://dayoneteams.com',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Dayone Software Technology, Inc.`,
       },
       prism: {
         theme: lightCodeTheme,
