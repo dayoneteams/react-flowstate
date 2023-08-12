@@ -110,7 +110,7 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'By Dayone',
+                label: 'Dayone',
                 href: 'https://dayoneteams.com',
               },
             ],
