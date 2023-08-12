@@ -32,20 +32,14 @@ npm install react-flowstate
 ```tsx
 import {DataLayout} from 'react-flowstate';
 
-function App() {
+export default function App() {
   return (
     <DataLayout
-      dataSource={() => fetchData()}
-      loadingIndicator={() => (
-        <div>Loading ...</div>
-      )}
-      errorFallback={(err) => (
-        <div>{err.message}</div>
-      )}
+      dataSource={fetchData}
+      loadingIndicator={<div>Loading ...</div>}
+      errorFallback={(err) => <div>{err.message}</div>}
     >
-      {({data}) => (
-        <div>Your data is here: {data}</div>
-      )}
+      {({data}) => <div>Your data is here: {data}</div>}
     </DataLayout>
   );
 }

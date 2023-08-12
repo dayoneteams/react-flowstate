@@ -14,18 +14,18 @@ npm install react-flowstate
 
 ## Basic Usage
 
-Create a file at `src/pages/my-react-page.js`:
+```jsx title="App.jsx"
+import {DataLayout} from 'react-flowstate';
 
-```jsx title="src/pages/my-react-page.js"
-import React from 'react';
-import Layout from '@theme/Layout';
-
-export default function MyReactPage() {
+export default function App() {
   return (
-    <Layout>
-      <h1>My React page</h1>
-      <p>This is a React page</p>
-    </Layout>
+    <DataLayout
+      dataSource={fetchData}
+      loadingIndicator={<div>Loading ...</div>}
+      errorFallback={(err) => <div>{err.message}</div>}
+    >
+      {({data}) => <div>Your data is here: {data}</div>}
+    </DataLayout>
   );
 }
 ```
