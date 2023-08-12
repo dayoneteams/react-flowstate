@@ -1,5 +1,7 @@
 # react-flowstate
 
+[![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE)
+
 ```
 useState and useEffect, they're so lame
 They're making me mad, I'm gonna change the game

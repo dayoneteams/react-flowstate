@@ -23,9 +23,9 @@
     "app:prod": "npm i -C app && npm run -C app build && npm start -C app ",
     "build": "tsdx build",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "tsdx lint src app examples",
     "lint:fix": "tsdx lint src app examples --fix",
-    "prepare": "npm run lint && npm run test && npm run build",
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
