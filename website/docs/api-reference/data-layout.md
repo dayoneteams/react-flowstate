@@ -31,11 +31,11 @@ export default function App() {
 
 Supply this value will set initial data.
 - If `initialData` is set, initial data fetching will be skipped.
-- If `initialData` is `undefined`, initial data fetching will triggered.
+- Otherwise, initial data fetching will triggered.
 
-| Type    | Default     |
-|---------|-------------|
-| unknown | `undefined` |
+| Type    |
+|---------|
+| Data |
 
 ---
 
