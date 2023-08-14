@@ -44,9 +44,9 @@ Supply this value will set initial data.
 - If `dataFallback` prop is not supplied, `children` will act as `DataFallback`.
 - If `dataFallback` prop is supplied, `children` will act as `AutoFallback`.
 
-| Type                             |
-|----------------------------------|
-| [DataFallback](#data-fallback) \ | AutoFallback |
+| Type                                           |
+|------------------------------------------------|
+| [DataFallback](#data-fallback) \| AutoFallback |
 
 ---
 
@@ -59,6 +59,10 @@ It is passed an optional dependency list that triggers reload behavior.
 
 If present, data will be reloaded if the values in the list change.
 
+| Type    |
+|---------|
+| React.DependencyList  |
+
 ### `debounceDelay`
 
 The number of milliseconds to delay invoking `dataSource` reload behavior.
@@ -66,13 +70,15 @@ If not present, any changes to `dependendcies` prop will trigger reload
   behavior
   and may affect the performance.
 
+| Type    |
+|---------|
+| number  |
+
 ### `loadingIndicator`
 
 Render loading UI
 
 ### `shadowReload`
-
-Default: `false`
 
 If `shadowReload` is true, the reload behavior will keep current displayed
   data
@@ -81,27 +87,46 @@ If `shadowReload` is true, the reload behavior will keep current displayed
   still
   shown.
 
+| Type    | Default |
+|---------|---------|
+| boolean | `false` |
+
 ### `preserveDataOnError`
 
-Default: `false`
-If `preserveDataOnError` is `false` and query function failed to fetch new
+- If `preserveDataOnError` is `false` and query function failed to fetch new
   data, current existing data will be set to be `null` and `errorFallback` will
   be displayed.
-Set `preserveDataOnError` to be `true` preserve existing data even if the
+- Set `preserveDataOnError` to be `true` preserve existing data even if the
   query failed. Can be use together with `onError` prop to show the error
   message to user (e.g: using `toarst` or `alert()`).
+
+| Type    | Default |
+|---------|---------|
+| boolean | `false` |
 
 ### `onError`
 
 Callback function invoked when `dataSource` fails to fetch data.
 
+| Type    |
+|---------|
+| (err: Error, props: DataLayoutProps<Data\>) => unknown |
+
 ### `errorFallback`
 
 Render error UI
 
+| Type                           |
+|--------------------------------|
+| [ErrorFallback](#error-fallback) |
+
 ### `dataFallback`
 
 Render data UI
+
+| Type                           |
+|--------------------------------|
+| [DataFallback](#data-fallback) |
 
 ## Type Definitions
 
