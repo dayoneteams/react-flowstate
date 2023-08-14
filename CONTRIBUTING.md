@@ -26,6 +26,12 @@ npm run app:prod
 ```
 Check the test app on http://localhost:3000
 
+## Start documentation website
+```
+npm run doc
+```
+Check the test app on http://localhost:5000/react-flowstate/
+
 ## Automation Test
 ```
 npm run test
