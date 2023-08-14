@@ -41,9 +41,14 @@ Supply this value will set initial data.
 
 ### `children`
 
-If `dataFallback` prop is not supplied, `children` will act as `DataFallback`
-If `dataFallback` prop is supplied, `children` will act as a dynamic view that
-  allows us to dynamically render whatever we want.
+- If `dataFallback` prop is not supplied, `children` will act as `DataFallback`.
+- If `dataFallback` prop is supplied, `children` will act as `AutoFallback`.
+
+| Type                             |
+|----------------------------------|
+| [DataFallback](#data-fallback) \ | AutoFallback |
+
+---
 
 ### `dataSource`
 
@@ -98,3 +103,11 @@ Render error UI
 
 Render data UI
 
+## Type Definitions
+
+### DataFallback
+Used for rendering data. 
+
+| Type              |
+|-------------------|
+| React.ReactNode \| ((props?: Props) => React.ReactNode) |
