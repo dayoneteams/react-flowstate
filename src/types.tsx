@@ -45,10 +45,6 @@ export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
 
 export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
-export type DataFallbackRenderFunction<Data> = RenderFunction<
-  DataLayoutProps<Data>
->;
-
 export type RenderFunction<Props = undefined> = (
   props?: Props
 ) => React.ReactNode;
@@ -107,17 +103,19 @@ export interface DataLayoutConfig<Data> {
    * @param err
    * @param state
    */
-  onError?: (err: Error, state: DataLayoutState<Data>) => unknown;
+  onError?: (err: Error, props: DataLayoutProps<Data>) => unknown;
 
   /**
    * React component to render UI displaying error
    */
   errorFallback?:
-    | ((err: Error, state: DataLayoutProps<Data>) => React.ReactNode)
+    | ((err: Error, props: DataLayoutProps<Data>) => React.ReactNode)
     | React.ReactNode;
 
   /**
    * UI that is only rendered when data is available
    */
-  dataFallback?: DataFallbackRenderFunction<Data> | React.ReactNode;
+  dataFallback?:
+    | ((props: DataLayoutProps<Data>) => React.ReactNode)
+    | React.ReactNode;
 }

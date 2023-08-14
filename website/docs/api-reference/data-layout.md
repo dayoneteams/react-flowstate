@@ -106,8 +106,15 @@ Render data UI
 ## Type Definitions
 
 ### DataFallback
-Used for rendering data. 
+Used for rendering data content.
 
 | Type              |
 |-------------------|
-| React.ReactNode \| ((props?: Props) => React.ReactNode) |
+| React.ReactNode \| (props: DataLayoutProps<Data\>) => React.ReactNode |
+
+### ErrorFallback
+Used for rendering data content.
+
+| Type              |
+|-------------------|
+| React.ReactNode \| (err: Error, props: DataLayoutProps<Data\>) => React.ReactNode |
