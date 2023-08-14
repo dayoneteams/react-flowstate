@@ -82,7 +82,7 @@ export interface DataLayoutConfig<Data> {
   /**
    * React component to render loading UI
    */
-  loadingIndicator?: RenderFunction | React.ReactNode;
+  loadingIndicator?: React.ReactNode | (() => React.ReactNode);
 
   /**
    * Once data has been fetched and displayed.

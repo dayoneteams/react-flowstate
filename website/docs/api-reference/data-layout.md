@@ -7,7 +7,7 @@ sidebar_label: <DataLayout />
 
 The `DataLayout` is the main component responsible for managing your data fetching, loading status and error handling lifecycle.
 
-Usage:
+## Example
 
 ```jsx title="App.jsx"
 import {DataLayout} from 'react-flowstate';
@@ -41,8 +41,12 @@ Supply this value will set initial data.
 
 ### `children`
 
-- If `dataFallback` prop is not supplied, `children` will act as `DataFallback`.
-- If `dataFallback` prop is supplied, `children` will act as `AutoFallback`.
+:::danger
+Please read **carefully**.
+:::
+
+- If [<code>dataFallback</code>](#datafallback) prop is **not supplied**, `children` will act as [<code>DataFallback</code>](#datafallback-1).
+- If [<code>dataFallback</code>](#datafallback) and `children` props are both **supplied**, `children` will act as `AutoFallback`.
 
 | Type                                           |
 |------------------------------------------------|
@@ -52,12 +56,24 @@ Supply this value will set initial data.
 
 ### `dataSource`
 
-Query function that fetches data and return a Promise.
-It is passed an optional dependency list that triggers reload behavior.
+```tsx
+(deps?: DependencyList) => Promise<Data>
+```
+
+Query function that fetches data and return a `Promise`.
+If [<code>dependencies</code>](#dependencies) prop is supplied, `dataSource` will be refetched and trigger reload behavior.
+
+| Type    |
+|---------|
+| function |
 
 ### `dependencies`
 
 If present, data will be reloaded if the values in the list change.
+
+:::caution
+Should be used together with [<code>debounceDelay</code>](#debouncedelay) prop to avoid performance issue.
+:::
 
 | Type    |
 |---------|
@@ -76,7 +92,15 @@ If not present, any changes to `dependendcies` prop will trigger reload
 
 ### `loadingIndicator`
 
-Render loading UI
+```tsx
+React.ReactNode | (() => React.ReactNode)
+```
+
+Render loading UI.
+
+| Type    |
+|---------|
+| React.ReactNode \| function  |
 
 ### `shadowReload`
 
@@ -106,27 +130,30 @@ If `shadowReload` is true, the reload behavior will keep current displayed
 
 ### `onError`
 
+```tsx
+(err: Error, props: DataLayoutProps<Data>) => unknown
+```
 Callback function invoked when `dataSource` fails to fetch data.
 
 | Type    |
 |---------|
-| (err: Error, props: DataLayoutProps<Data\>) => unknown |
+| function |
 
 ### `errorFallback`
 
-Render error UI
+Render error UI.
 
 | Type                           |
 |--------------------------------|
-| [ErrorFallback](#error-fallback) |
+| [ErrorFallback](#errorfallback-1) |
 
 ### `dataFallback`
 
-Render data UI
+Render data UI.
 
 | Type                           |
 |--------------------------------|
-| [DataFallback](#data-fallback) |
+| [DataFallback](#datafallback-1) |
 
 ## Type Definitions
 
