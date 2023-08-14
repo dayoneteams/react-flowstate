@@ -45,10 +45,6 @@ export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
 
 export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
-export type RenderFunction<Props = undefined> = (
-  props?: Props
-) => React.ReactNode;
-
 /**
  * <DataLayout /> props
  */
