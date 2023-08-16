@@ -34,6 +34,8 @@ npm install react-flowstate
 ```tsx
 import {DataLayout} from 'react-flowstate';
 
+const fetchData = () => Math.random();
+
 export default function App() {
   return (
     <DataLayout
