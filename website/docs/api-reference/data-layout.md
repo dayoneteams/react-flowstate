@@ -12,6 +12,8 @@ The `DataLayout` is the main component responsible for managing your data fetchi
 ```jsx title="App.jsx"
 import {DataLayout} from 'react-flowstate';
 
+const fetchData = () => Math.random();
+
 export default function App() {
   return (
     <DataLayout
