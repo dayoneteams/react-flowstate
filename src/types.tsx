@@ -8,15 +8,15 @@ export type ResponseData = any;
 /**
  * Helpers functions to manually control DataLayout.
  */
-export interface DataLayoutHelpers {
+export interface DataLayoutControlHelpers {
   /** Reload layout */
   reload: (options?: { shadow: boolean }) => void;
 }
 
 /**
- * Helpers functions to manually control DataLayout.
+ * Helpers functions to manually control rendering logic.
  */
-export type DataLayoutPropsWithRenderHelpers<Data> = DataLayoutProps<Data> & {
+export type DataLayoutRenderHelpers = {
   renderAutoFallback: () => React.ReactNode;
 };
 
@@ -41,7 +41,8 @@ export interface DataLayoutComputedProps<Data> {
 /**
  * State, handlers, and helpers for all components under <DataLayout />.
  */
-export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
+export type DataLayoutProps<Data> = DataLayoutState<Data> &
+  DataLayoutControlHelpers;
 
 export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
@@ -55,8 +56,9 @@ export interface DataLayoutConfig<Data> {
    * React children or child render callback
    */
   children?:
+    | ((props: DataLayoutProps<Data>) => React.ReactNode)
     | ((
-        props: DataLayoutProps<Data> | DataLayoutPropsWithRenderHelpers<Data>
+        props: DataLayoutProps<Data> & DataLayoutRenderHelpers
       ) => React.ReactNode)
     | React.ReactNode;
 
