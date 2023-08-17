@@ -101,7 +101,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
         if (onError) {
-          onError(err as Error, state);
+          onError(err as Error, context);
         }
         dispatch({
           type: 'LOAD_FAILURE',

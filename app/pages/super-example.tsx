@@ -13,6 +13,7 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  Input,
   Paper,
   Stack,
   Typography,
@@ -65,12 +66,8 @@ export default function SuperExample() {
         preserveDataOnError: false,
         throwErrorOnNextFetch: false,
         throwErrorViaToastAlert: false,
-      }}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
-        }, 1000);
+        supportSearch: false,
+        searchKeyword: '',
       }}
     >
       {props => (
@@ -121,7 +118,7 @@ export default function SuperExample() {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="h6" gutterBottom>
-                    Fetch function
+                    Misc
                   </Typography>
                   <FormGroup>
                     <FormControlLabel
@@ -135,6 +132,18 @@ export default function SuperExample() {
                       label="Throw error on next fetch"
                     />
                   </FormGroup>
+                  <FormGroup>
+                    <FormControlLabel
+                      name="supportSearch"
+                      control={
+                        <Checkbox
+                          onChange={props.handleChange}
+                          value={props.values.supportSearch}
+                        />
+                      }
+                      label="Support search"
+                    />
+                  </FormGroup>
                 </Grid>
               </Grid>
             </form>
@@ -143,7 +152,19 @@ export default function SuperExample() {
             <Typography variant="h6" gutterBottom>
               React libraries
             </Typography>
+            {props.values.supportSearch && (
+              <Input
+                sx={{ mb: 3 }}
+                name="searchKeyword"
+                onChange={props.handleChange}
+                placeholder="react, router, ..."
+              />
+            )}
             <DataLayout
+              debounceDelay={props.values.supportSearch ? 1000 : 0}
+              dependencies={
+                props.values.supportSearch ? [props.values.searchKeyword] : []
+              }
               shadowReload={props.values.shadowReload}
               preserveDataOnError={props.values.preserveDataOnError}
               dataSource={
