@@ -88,10 +88,6 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const setDebouncedDepsRef = useRef(
     lodashDebounce(setDebouncedDependencies, debounceDelay || 0)
   );
-  useEffect(() => {
-    setDebouncedDepsRef.current(dependencies as DependencyList);
-  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
-
   const { error, isLoading, isLoadingInShadow } = state;
 
   const loadData = useCallback(
@@ -115,6 +111,10 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     },
     [dataSource, dispatch, onError, state, shadowReload, preserveDataOnError]
   );
+
+  useEffect(() => {
+    setDebouncedDepsRef.current(dependencies as DependencyList);
+  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!initialDataLoadedRef.current) {

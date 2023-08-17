@@ -5,7 +5,7 @@
 - Git installed.
 
 ## Development
-Clone codebase and install dependencies.
+Fork and clone codebase then install dependencies.
 ```
 npm install
 ```
@@ -43,7 +43,7 @@ Check lint issues.
 npm run lint
 ```
 
-Auto-fix lint issues.
+Auto-fix lint issues. Do this before committing code.
 ```
 npm run lint:fix
 ```
