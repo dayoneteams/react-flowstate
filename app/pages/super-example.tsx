@@ -76,9 +76,9 @@ export default function SuperExample() {
       {props => (
         <Stack spacing={3}>
           <Paper elevation={1} sx={{ padding: 3 }}>
-            <form className="w-1/4">
+            <form>
               <Grid container>
-                <Grid xs={6}>
+                <Grid item xs={6}>
                   <Typography variant="h6" gutterBottom>
                     DataLayout options
                   </Typography>
@@ -119,7 +119,7 @@ export default function SuperExample() {
                     />
                   </FormGroup>
                 </Grid>
-                <Grid xs={6}>
+                <Grid item xs={6}>
                   <Typography variant="h6" gutterBottom>
                     Fetch function
                   </Typography>
