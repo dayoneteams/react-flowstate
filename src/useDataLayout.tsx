@@ -88,10 +88,6 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const setDebouncedDepsRef = useRef(
     lodashDebounce(setDebouncedDependencies, debounceDelay || 0)
   );
-  useEffect(() => {
-    setDebouncedDepsRef.current(dependencies as DependencyList);
-  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
-
   const { error, isLoading, isLoadingInShadow } = state;
 
   const loadData = useCallback(
@@ -105,7 +101,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
       } catch (err) {
         if (onError) {
-          onError(err as Error, state);
+          onError(err as Error, context);
         }
         dispatch({
           type: 'LOAD_FAILURE',
@@ -115,6 +111,10 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     },
     [dataSource, dispatch, onError, state, shadowReload, preserveDataOnError]
   );
+
+  useEffect(() => {
+    setDebouncedDepsRef.current(dependencies as DependencyList);
+  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!initialDataLoadedRef.current) {

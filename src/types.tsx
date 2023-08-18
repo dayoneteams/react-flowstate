@@ -8,15 +8,15 @@ export type ResponseData = any;
 /**
  * Helpers functions to manually control DataLayout.
  */
-export interface DataLayoutHelpers {
+export interface DataLayoutControlHelpers {
   /** Reload layout */
   reload: (options?: { shadow: boolean }) => void;
 }
 
 /**
- * Helpers functions to manually control DataLayout.
+ * Helpers functions to manually control rendering logic.
  */
-export type DataLayoutPropsWithRenderHelpers<Data> = DataLayoutProps<Data> & {
+export type DataLayoutRenderHelpers = {
   renderAutoFallback: () => React.ReactNode;
 };
 
@@ -41,17 +41,10 @@ export interface DataLayoutComputedProps<Data> {
 /**
  * State, handlers, and helpers for all components under <DataLayout />.
  */
-export type DataLayoutProps<Data> = DataLayoutState<Data> & DataLayoutHelpers;
+export type DataLayoutProps<Data> = DataLayoutState<Data> &
+  DataLayoutControlHelpers;
 
 export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
-
-export type DataFallbackRenderFunction<Data> = RenderFunction<
-  DataLayoutProps<Data>
->;
-
-export type RenderFunction<Props = undefined> = (
-  props?: Props
-) => React.ReactNode;
 
 /**
  * <DataLayout /> props
@@ -63,8 +56,9 @@ export interface DataLayoutConfig<Data> {
    * React children or child render callback
    */
   children?:
+    | ((props: DataLayoutProps<Data>) => React.ReactNode)
     | ((
-        props: DataLayoutProps<Data> | DataLayoutPropsWithRenderHelpers<Data>
+        props: DataLayoutProps<Data> & DataLayoutRenderHelpers
       ) => React.ReactNode)
     | React.ReactNode;
 
@@ -86,7 +80,7 @@ export interface DataLayoutConfig<Data> {
   /**
    * React component to render loading UI
    */
-  loadingIndicator?: RenderFunction | React.ReactNode;
+  loadingIndicator?: React.ReactNode | (() => React.ReactNode);
 
   /**
    * Once data has been fetched and displayed.
@@ -107,17 +101,19 @@ export interface DataLayoutConfig<Data> {
    * @param err
    * @param state
    */
-  onError?: (err: Error, state: DataLayoutState<Data>) => unknown;
+  onError?: (err: Error, props: DataLayoutProps<Data>) => unknown;
 
   /**
    * React component to render UI displaying error
    */
   errorFallback?:
-    | ((err: Error, state: DataLayoutProps<Data>) => React.ReactNode)
+    | ((err: Error, props: DataLayoutProps<Data>) => React.ReactNode)
     | React.ReactNode;
 
   /**
    * UI that is only rendered when data is available
    */
-  dataFallback?: DataFallbackRenderFunction<Data> | React.ReactNode;
+  dataFallback?:
+    | ((props: DataLayoutProps<Data>) => React.ReactNode)
+    | React.ReactNode;
 }

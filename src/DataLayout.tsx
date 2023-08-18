@@ -1,10 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-  DataLayoutConfig,
-  DataLayoutProps,
-  DataFallbackRenderFunction,
-  ResponseData,
-} from './types';
+import { DataLayoutConfig, DataLayoutProps, ResponseData } from './types';
 import { isFunction } from './utils';
 import { DataLayoutProvider } from './DataLayoutContext';
 import { useDataLayout } from './useDataLayout';
@@ -55,9 +50,9 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     }
 
     if (isFunction(finalDataFallback)) {
-      return (finalDataFallback as DataFallbackRenderFunction<Data>)(
-        contextValue
-      );
+      return (finalDataFallback as (
+        props: DataLayoutProps<Data>
+      ) => React.ReactNode)(contextValue);
     }
 
     return React.Children.only(finalDataFallback);
@@ -108,11 +103,6 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     return React.Children.only(children);
   }, [contextValue, children, renderAutoFallback]);
 
-  // dataFallback + children => render children as children
-  //   children is react node => render children as react node
-  //   children is render function => render children as render function with renderAutoFallback() method injected
-  // !dataFallback + children => render children as datafallback
-  // !dataFallback + !children => warning
   return (
     <DataLayoutProvider value={contextValue}>
       {children && dataFallback ? renderChildren() : renderAutoFallback()}

@@ -21,6 +21,7 @@
     "start": "tsdx watch",
     "app": "npm i -C app && npm run -C app dev",
     "app:prod": "npm i -C app && npm run -C app build && npm start -C app ",
+    "doc": "npm i -C website && npm start -C website",
     "build": "tsdx build",
     "test": "jest",
     "test:coverage": "jest --coverage",

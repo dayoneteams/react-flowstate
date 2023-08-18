@@ -23,9 +23,15 @@ export default () => {
       <DataLayout
         dependencies={[searchKey]}
         dataSource={([searchKey]) =>
-          Promise.resolve(
-            REACT_LIBRARIES.filter(reactLib =>
-              reactLib.name.match(new RegExp(searchKey as string, 'gi'))
+          new Promise(resolve =>
+            setTimeout(
+              () =>
+                resolve(
+                  REACT_LIBRARIES.filter(reactLib =>
+                    reactLib.name.match(new RegExp(searchKey as string, 'gi'))
+                  )
+                ),
+              1000
             )
           )
         }
