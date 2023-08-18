@@ -20,6 +20,7 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'react-flowstate', // Usually your GitHub org/user name.
   projectName: 'react-flowstate.github.io', // Usually your repo name.
+  deploymentBranch: 'main',
   trailingSlash: false,
 
   onBrokenLinks: 'throw',

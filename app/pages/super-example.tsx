@@ -1,5 +1,5 @@
 import React from 'react';
-import {Formik} from 'formik';
+import { Formik } from 'formik';
 import {
   Alert,
   AlertTitle,
@@ -19,7 +19,7 @@ import {
   Typography,
   Pagination,
 } from '@mui/material';
-import {DataLayout} from 'react-flowstate';
+import { DataLayout } from 'react-flowstate';
 import sampleSize from 'lodash.samplesize';
 import toastr from 'toastr';
 
@@ -73,7 +73,7 @@ export default function SuperExample() {
     >
       {props => (
         <Stack spacing={3}>
-          <Paper elevation={1} sx={{padding: 3}}>
+          <Paper elevation={1} sx={{ padding: 3 }}>
             <form>
               <Grid container>
                 <Grid item xs={6}>
@@ -149,7 +149,7 @@ export default function SuperExample() {
               </Grid>
             </form>
           </Paper>
-          <Paper elevation={1} sx={{padding: 3}}>
+          <Paper elevation={1} sx={{ padding: 3 }}>
             <Typography variant="h6" gutterBottom>
               React libraries
             </Typography>
@@ -157,7 +157,7 @@ export default function SuperExample() {
               container
               direction="row"
               justifyContent="space-between"
-              sx={{mb: 3}}
+              sx={{ mb: 3 }}
             >
               {props.values.supportSearch ? (
                 <Input
@@ -165,8 +165,10 @@ export default function SuperExample() {
                   onChange={props.handleChange}
                   placeholder="react, router, ..."
                 />
-              ) : <div />}
-              <Pagination count={10} color="primary"/>
+              ) : (
+                <div />
+              )}
+              <Pagination count={10} color="primary" />
             </Grid>
             <DataLayout
               debounceDelay={props.values.supportSearch ? 1000 : 0}
@@ -179,8 +181,8 @@ export default function SuperExample() {
                 props.values.throwErrorOnNextFetch ? fetchError : fetchSuccess
               }
               loadingIndicator={() => (
-                <Box sx={{mt: 1, display: 'flex', justifyContent: 'center'}}>
-                  <CircularProgress/>
+                <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                  <CircularProgress />
                 </Box>
               )}
               onError={err => {
@@ -188,14 +190,14 @@ export default function SuperExample() {
                   toastr.error(err.message);
                 }
               }}
-              errorFallback={(e, {reload}) => (
+              errorFallback={(e, { reload }) => (
                 <Alert severity="error">
                   <AlertTitle>Error</AlertTitle>
                   {e.message}
                   <Button
                     onClick={() => reload()}
                     variant="contained"
-                    sx={{ml: 1}}
+                    sx={{ ml: 1 }}
                     color="error"
                   >
                     Try Again
@@ -203,7 +205,7 @@ export default function SuperExample() {
                 </Alert>
               )}
             >
-              {({data, reload}) => (
+              {({ data, reload }) => (
                 <>
                   <Grid container spacing={2}>
                     {data.map((jsLib, index) => (
@@ -226,13 +228,13 @@ export default function SuperExample() {
                   <Stack
                     direction="row"
                     spacing={1}
-                    sx={{mt: 3, display: 'flex', justifyContent: 'center'}}
+                    sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}
                   >
                     <Button onClick={() => reload()} variant="contained">
                       Reload
                     </Button>
                     <Button
-                      onClick={() => reload({shadow: true})}
+                      onClick={() => reload({ shadow: true })}
                       variant="contained"
                     >
                       Shadow Reload
