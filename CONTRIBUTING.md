@@ -4,15 +4,36 @@
 - Node.js (LTS recommended) installed.
 - Git installed.
 
-## Development
-Fork and clone codebase then install dependencies.
+## Get started
+Fork Github repository https://github.com/dayoneteams/react-flowstate.
+
+Clone codebase.
 ```
-npm install
+git clone <fork-repo-url>
 ```
+
+Add `root` remote to keep code up-to-date.
+```
+git add remote root git@github.com:dayoneteams/react-flowstate.git
+```
+
+Create new branch to work on.
+```
+git checkout -b <branch name, e.g: feature/abc, fix/cde>
+```
+
+Create PR from your forked branch to `main` branch of `root` remote.
+Rebase code first to get all new updated code (resolve conflicts if any).
+```
+git pull root main --rebase
+```
+Go to https://github.com/dayoneteams/react-flowstate/compare and create new PR.
+
 
 ## Bundling library and run test app server with live code update
 Start build process in watch mode.
 ```
+npm install
 npm start
 ```
 This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
