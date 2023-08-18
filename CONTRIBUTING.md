@@ -14,7 +14,7 @@ git clone <fork-repo-url>
 
 Add `root` remote to keep code up-to-date.
 ```
-git add remote root git@github.com:dayoneteams/react-flowstate.git
+git remote add root git@github.com:dayoneteams/react-flowstate.git
 ```
 
 Create new branch to work on.
