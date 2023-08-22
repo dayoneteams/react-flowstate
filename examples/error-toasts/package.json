@@ -1,0 +1,20 @@
+{
+  "name": "react-flowstate-example-error-toasts",
+  "version": "0.1.0",
+  "description": "Error Toasts React-Flowstate example",
+  "main": "index.js",
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.12.1",
+    "lodash.samplesize": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-flowstate": "latest",
+    "toastr": "^2.1.4"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.9.3",
+    "process": "^0.11.10"
+  }
+}
