@@ -15,7 +15,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import sampleSize from 'lodash.samplesize';
 import toastr from 'toastr';
@@ -61,7 +60,6 @@ const fetchError = () =>
 
 const Basic = () => {
   const [throwError, setThrowError] = useState(false);
-  const [throwErrorViaToastAlert, setThrowErrorViaToastAlert] = useState(false)
   return (
     <Container>
       <Typography variant="h5" textAlign="center" marginBottom={2}>
@@ -75,18 +73,6 @@ const Basic = () => {
             setThrowError(e.target.checked);
           }}
         />
-        <FormControlLabel
-          name="throwErrorViaToastAlert"
-          control={
-            <Checkbox
-              onChange={e => {
-                setThrowErrorViaToastAlert(e.target.value);
-              }}
-              value={throwErrorViaToastAlert}
-            />
-          }
-          label="Throw error via toast alert"
-        />
       </Box>
       <DataLayout
         dataSource={throwError ? fetchError : fetchSuccess}
@@ -95,11 +81,9 @@ const Basic = () => {
             <CircularProgress />
           </Box>
         )}
-        preserveDataOnError={true}
+        preserveDataOnError
         onError={err => {
-          if (throwErrorViaToastAlert) {
-            toastr.error("Failed to fetch data");
-          }
+          toastr.error(err.message);
         }}
         errorFallback={(e, { reload }) => (
           <Alert severity="error">
