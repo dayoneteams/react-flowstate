@@ -20,40 +20,9 @@ import {
   Pagination,
 } from '@mui/material';
 import { DataLayout } from 'react-flowstate';
-import sampleSize from 'lodash.samplesize';
 import toastr from 'toastr';
+import { fetchData } from '@/fixtures/data';
 
-const REACT_LIBS = [
-  {
-    name: 'React Router',
-    websiteUrl: 'https://reactrouter.com/',
-  },
-  {
-    name: 'Material-UI',
-    websiteUrl: 'https://mui.com/',
-  },
-  {
-    name: 'Next.js',
-    websiteUrl: 'https://nextjs.org/',
-  },
-  {
-    name: 'Redux',
-    description:
-      'A predictable state container for JavaScript apps, providing a centralized store for managing application state.',
-    websiteUrl: 'https://redux.js.org/',
-  },
-  {
-    name: 'Axios',
-    description:
-      'A library for making HTTP requests from JavaScript applications, offering a simple API for sending and receiving data from APIs.',
-    websiteUrl: 'https://axios-http.com/',
-  },
-];
-const SIZE = 2;
-const fetchSuccess = () =>
-  new Promise(resolve =>
-    setTimeout(() => resolve(sampleSize(REACT_LIBS, SIZE)), 1000)
-  );
 const fetchError = () =>
   new Promise((resolve, reject) =>
     setTimeout(() => reject(new Error('Failed to fetch data')), 1000)
@@ -69,6 +38,7 @@ export default function SuperExample() {
         throwErrorViaToastAlert: false,
         supportSearch: false,
         searchKeyword: '',
+        pageNo: 1,
       }}
     >
       {props => (
@@ -168,17 +138,19 @@ export default function SuperExample() {
               ) : (
                 <div />
               )}
-              <Pagination count={10} color="primary" />
             </Grid>
             <DataLayout
               debounceDelay={props.values.supportSearch ? 1000 : 0}
-              dependencies={
-                props.values.supportSearch ? [props.values.searchKeyword] : []
-              }
+              dependencies={[props.values.searchKeyword, props.values.pageNo]}
               shadowReload={props.values.shadowReload}
               preserveDataOnError={props.values.preserveDataOnError}
-              dataSource={
-                props.values.throwErrorOnNextFetch ? fetchError : fetchSuccess
+              dataSource={([searchKeyword, pageNo]) =>
+                props.values.throwErrorOnNextFetch
+                  ? fetchError()
+                  : fetchData({
+                      searchKeyword: searchKeyword as string,
+                      pageNo: pageNo as number,
+                    })
               }
               loadingIndicator={() => (
                 <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
@@ -207,8 +179,14 @@ export default function SuperExample() {
             >
               {({ data, reload }) => (
                 <>
+                  <Pagination
+                    page={props.values.pageNo}
+                    count={data.pageCount}
+                    color="primary"
+                    onChange={(e, val) => props.setFieldValue('pageNo', val)}
+                  />
                   <Grid container spacing={2}>
-                    {data.map((jsLib, index) => (
+                    {data.items.map((jsLib, index) => (
                       <Grid key={index} item xs={12}>
                         <Card>
                           <CardContent>
