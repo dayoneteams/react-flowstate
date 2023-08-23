@@ -73,7 +73,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   debounceDelay = 0,
   dependencies = [],
 }: DataLayoutConfig<Data>) {
-  const initialDataLoadedRef = useRef(!!initialData);
+  // const initialDataLoadedRef = useRef(!!initialData);
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
   >(dataLayoutReducer, {
@@ -92,7 +92,6 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
 
   const loadData = useCallback(
     async (dependencies: DependencyList, shadow = false) => {
-      console.log('load data called');
       try {
         dispatch({
           type: 'LOAD_START',
@@ -117,15 +116,14 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     setDebouncedDepsRef.current(dependencies as DependencyList);
   }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    console.log('initialDataLoadedRef');
-    if (!initialDataLoadedRef.current) {
-      loadData(dependencies as DependencyList);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   console.log('initialDataLoadedRef');
+  //   if (!initialDataLoadedRef.current) {
+  //     loadData(dependencies as DependencyList);
+  //   }
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    console.log('debouncedDependencies');
     loadData(dependencies as DependencyList);
   }, [debouncedDependencies]); // eslint-disable-line react-hooks/exhaustive-deps
 

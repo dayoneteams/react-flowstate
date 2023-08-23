@@ -1,3 +1,5 @@
+import lodashSampleSize from 'lodash.samplesize';
+
 const DATA = [
   {
     name: 'jQuery',
@@ -147,7 +149,6 @@ export const fetchData = ({
     (pageNo - 1) * PAGE_SIZE,
     pageNo * PAGE_SIZE
   );
-  console.log(itemsInPage);
   return new Promise(resolve =>
     setTimeout(
       () =>
@@ -159,3 +160,18 @@ export const fetchData = ({
     )
   );
 };
+
+export const fetchRandomData = () =>
+  new Promise(resolve =>
+    setTimeout(
+      () => resolve({ items: lodashSampleSize(DATA, PAGE_SIZE), pageCount: 1 }),
+      TIMEOUT
+    )
+  );
+
+export const fetchDataWithRandomError = () =>
+  Math.random() <= 0.5
+    ? fetchRandomData()
+    : new Promise((resolve, reject) =>
+        setTimeout(() => reject(new Error('Failed to fetch data.')), TIMEOUT)
+      );

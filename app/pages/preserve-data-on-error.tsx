@@ -1,76 +1,86 @@
 import React from 'react';
-import toastr from 'toastr';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { DataLayout } from 'react-flowstate';
-import { fetchDataRandomError } from '@/data';
+import toastr from 'toastr';
+import { fetchDataWithRandomError } from '@/fixtures/data';
 
-export default () => (
-  <div className="container mx-auto p-4">
-    <h1 className="text-3xl text-center">Advanced error handling</h1>
-    <h3 className="text-1xl text-center mb-5">Preserve data on error</h3>
-    <DataLayout
-      preserveDataOnError
-      shadowReload
-      dataSource={fetchDataRandomError}
-      loadingIndicator={
-        <div className="text-center">
-          <progress className="progress progress-accent w-56" />
-          <div>Wait me a sec ...</div>
-        </div>
-      }
-      onError={(err, { data }) => {
-        if (data) {
-          toastr.error(err.message, 'Opps! There is an error.');
-        }
-      }}
-      errorFallback={(err, { reload, isLoading }) => (
-        <div className="text-center">
-          <span className="text-5xl" role="img" aria-label="cry on error">
-            🥵
-          </span>
-          <div className="text-red-500 mt-1">{err.message}</div>
-          <div className="mt-5 flex justify-center">
-            <button
+export default function PreserveDataOnErrorExample() {
+  return (
+    <Paper elevation={1} sx={{ padding: 3 }}>
+      <Typography variant="h6" gutterBottom>
+        React libraries
+      </Typography>
+      <DataLayout
+        preserveDataOnError
+        dataSource={fetchDataWithRandomError}
+        loadingIndicator={() => (
+          <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        )}
+        onError={err => {
+          toastr.error(err.message);
+        }}
+        errorFallback={(e, { reload }) => (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            {e.message}
+            <Button
               onClick={() => reload()}
-              className="btn btn-primary btn-sm"
-              disabled={isLoading}
+              variant="contained"
+              sx={{ ml: 1 }}
+              color="error"
             >
-              Reload
-            </button>
-          </div>
-        </div>
-      )}
-    >
-      {({ data, reload, isLoading }) => (
-        <div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {data?.map((member, index) => (
-              <div className="card bg-green-100 shadow-xl" key={index}>
-                <div className="card-body">
-                  <h2 className="card-title">{member.name}</h2>
-                  <p>{member.description}</p>
-                  <a
-                    className="link link-secondary"
-                    href={member.websiteUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {member.websiteUrl}
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-5 flex justify-center">
-            <button
-              onClick={() => reload()}
-              className="btn btn-primary"
-              disabled={isLoading}
+              Try Again
+            </Button>
+          </Alert>
+        )}
+      >
+        {({ data, reload }) => (
+          <>
+            <Grid container spacing={2}>
+              {data.items.map((jsLib, index) => (
+                <Grid key={index} item xs={12}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {jsLib.name}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button href={jsLib.websiteUrl} size="small">
+                        Learn More
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}
             >
-              Reload
-            </button>
-          </div>
-        </div>
-      )}
-    </DataLayout>
-  </div>
-);
+              <Button onClick={() => reload()} variant="contained">
+                Reload
+              </Button>
+            </Stack>
+          </>
+        )}
+      </DataLayout>
+    </Paper>
+  );
+}
