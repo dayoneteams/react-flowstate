@@ -25,17 +25,26 @@ export type DataLayoutState<Data> = {
   isLoading: boolean;
   isLoadingInShadow: boolean;
   error: Error | null;
-};
+} & DataLayoutComputedState<Data>;
 
 /**
  * Computed properties. These are read-only.
  */
-export interface DataLayoutComputedProps<Data> {
+export interface DataLayoutComputedState<Data> {
   /** The initial values of the layout */
-  readonly initialData: Data;
+  readonly initialData?: Data;
 
   /** Last time when data was successfully fetched, null if datasource not yet fetched */
-  readonly lastFetchSuccessAt: Date;
+  readonly dataUpdatedAt: Date | null;
+
+  /** Last time when fetching failed, null if datasource not yet failed */
+  readonly errorUpdatedAt: Date | null;
+
+  /** Last time when fetching failed, null if datasource not yet failed */
+  readonly loadingStartedAt: Date | null;
+
+  /** Equals `true` if current data is a result of data preservation */
+  readonly isPreservedData: boolean;
 }
 
 /**

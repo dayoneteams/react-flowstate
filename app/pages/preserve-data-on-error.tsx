@@ -31,9 +31,9 @@ export default function PreserveDataOnErrorExample() {
             <CircularProgress />
           </Box>
         )}
-        onError={err => {
-          toastr.error(err.message);
-        }}
+        onError={err =>
+          toastr.error(`${err.message} Old data is displayed instead.`)
+        }
         errorFallback={(e, { reload }) => (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
@@ -49,9 +49,14 @@ export default function PreserveDataOnErrorExample() {
           </Alert>
         )}
       >
-        {({ data, reload }) => (
+        {({ data, reload, lastFetchSuccessAt, lastFetchErrorAt }) => (
           <>
             <Grid container spacing={2}>
+              {lastFetchSuccessAt < lastFetchErrorAt && (
+                <Typography>
+                  As error happened, we fallback to previous data snapshot.
+                </Typography>
+              )}
               {data.items.map((jsLib, index) => (
                 <Grid key={index} item xs={12}>
                   <Card>

@@ -41,9 +41,9 @@ export function dataLayoutReducer<Data>(
       return {
         ...state,
         ...CLEAR_ERROR,
-        data: action.payload.shadow ? state.data : null,
         isLoading: true,
         isLoadingInShadow: action.payload.shadow,
+        loadingStartedAt: new Date(),
       };
     case 'LOAD_SUCCESS':
       return {
@@ -51,13 +51,16 @@ export function dataLayoutReducer<Data>(
         ...CLEAR_LOADING,
         ...CLEAR_ERROR,
         data: action.payload,
+        dataUpdatedAt: new Date(),
       };
     case 'LOAD_FAILURE':
       return {
         ...state,
         ...CLEAR_LOADING,
         data: action.payload.preserveData ? state.data : null,
+        isPreservedData: action.payload.preserveData,
         error: action.payload.error,
+        errorUpdatedAt: new Date(),
       };
     default:
       return state;
@@ -77,10 +80,15 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
   >(dataLayoutReducer, {
+    initialData,
     data: initialData || null,
     error: null,
     isLoading: !initialData,
     isLoadingInShadow: !initialData && shadowReload,
+    dataUpdatedAt: null,
+    errorUpdatedAt: null,
+    loadingStartedAt: null,
+    isPreservedData: false,
   });
   const [debouncedDependencies, setDebouncedDependencies] = useState(
     dependencies
@@ -95,7 +103,9 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
       try {
         dispatch({
           type: 'LOAD_START',
-          payload: { shadow: shadow || shadowReload },
+          payload: {
+            shadow: shadow || shadowReload,
+          },
         });
         const fetchedData = await dataSource(dependencies);
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
@@ -128,7 +138,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   }, [debouncedDependencies]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const context: DataLayoutContextType<Data> = {
-    data: state.data,
+    ...state,
     error,
     isLoading,
     isLoadingInShadow,
