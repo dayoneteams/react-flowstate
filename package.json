@@ -11,6 +11,17 @@
   "bugs": {
     "url": "https://github.com/dayoneteams/react-flowstate/issues"
   },
+  "keywords": [
+    "fetch",
+    "react",
+    "react-dom",
+    "loading",
+    "render",
+    "data",
+    "render props",
+    "dynamic",
+    "layout"
+  ],
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/react-flowstate.esm.js",
