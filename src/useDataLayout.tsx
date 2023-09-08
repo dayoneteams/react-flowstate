@@ -10,7 +10,7 @@ import {
 import lodashDebounce from 'lodash.debounce';
 import {
   DataLayoutConfig,
-  DataLayoutContextType,
+  DataLayoutContextValue,
   DataLayoutState,
   ResponseData,
 } from './types';
@@ -45,7 +45,6 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   const setDebouncedDepsRef = useRef(
     lodashDebounce(setDebouncedDependencies, debounceDelay || 0)
   );
-  const { error, isLoading, isLoadingInShadow } = state;
 
   const loadData = useCallback(
     async (dependencies: DependencyList, shadow = false) => {
@@ -87,11 +86,8 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     loadData(dependencies as DependencyList);
   }, [debouncedDependencies]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const context: DataLayoutContextType<Data> = {
+  const context: DataLayoutContextValue<Data> = {
     ...state,
-    error,
-    isLoading,
-    isLoadingInShadow,
     reload: (options?: { shadow: boolean }) => {
       loadData(dependencies as DependencyList, options?.shadow || shadowReload);
     },
