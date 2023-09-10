@@ -34,13 +34,6 @@ export function DataLayout<Data extends ResponseData = ResponseData>(
     [preserveDataOnError, isLoading, isLoadingInShadow, error, data]
   );
 
-  console.log({
-    showLoadingIndicator,
-    showDataFallback,
-    showErrorFallback,
-  });
-  console.log({ isLoading, isLoadingInShadow, error, data });
-
   const renderLoadingIndicator = useCallback(() => {
     if (!loadingIndicator) {
       return null;

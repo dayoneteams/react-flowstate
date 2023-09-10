@@ -111,6 +111,12 @@ export interface DataLayoutConfig<Data> {
   onError?: (err: Error, props: DataLayoutContextValue<Data>) => unknown;
 
   /**
+   * Callback function on data success. Useful for showing toast or alert.
+   * @param data
+   */
+  onData?: (data: Data) => unknown;
+
+  /**
    * React component to render UI displaying error
    */
   errorFallback?:

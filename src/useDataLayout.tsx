@@ -22,6 +22,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   shadowReload = false,
   preserveDataOnError = false,
   onError,
+  onData,
   debounceDelay = 0,
   dependencies = [],
 }: DataLayoutConfig<Data>) {
@@ -58,9 +59,12 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         });
         const fetchedData = await dataSource(dependencies);
         dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
+        if (onData) {
+          onData(fetchedData);
+        }
       } catch (err) {
         if (onError) {
-          onError(err as Error, context);
+          onError(err as Error, contextValue);
         }
         dispatch({
           type: 'LOAD_FAILURE',
@@ -68,7 +72,15 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
         });
       }
     },
-    [dataSource, dispatch, onError, state, shadowReload, preserveDataOnError]
+    [
+      dataSource,
+      dispatch,
+      onError,
+      onData,
+      state,
+      shadowReload,
+      preserveDataOnError,
+    ]
   );
 
   useEffect(() => {
@@ -76,22 +88,22 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
   // useEffect(() => {
-  //   console.log('initialDataLoadedRef');
   //   if (!initialDataLoadedRef.current) {
   //     loadData(dependencies as DependencyList);
   //   }
   // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    console.log('adsf');
     loadData(dependencies as DependencyList);
   }, [debouncedDependencies]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const context: DataLayoutContextValue<Data> = {
+  const contextValue: DataLayoutContextValue<Data> = {
     ...state,
     reload: (options?: { shadow: boolean }) => {
       loadData(dependencies as DependencyList, options?.shadow || shadowReload);
     },
   };
 
-  return context;
+  return contextValue;
 }

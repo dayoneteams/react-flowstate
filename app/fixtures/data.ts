@@ -149,6 +149,7 @@ export const fetchData = ({
     (pageNo - 1) * PAGE_SIZE,
     pageNo * PAGE_SIZE
   );
+  console.log('abc', searchKeyword, pageNo, pageCount, itemsInPage.length);
   return new Promise(resolve =>
     setTimeout(
       () =>
