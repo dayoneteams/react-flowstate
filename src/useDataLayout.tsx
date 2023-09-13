@@ -1,12 +1,4 @@
-import {
-  Reducer,
-  useCallback,
-  useEffect,
-  useReducer,
-  useRef,
-  DependencyList,
-  useState,
-} from 'react';
+import { Reducer, useEffect, useReducer, useRef, DependencyList } from 'react';
 import lodashDebounce from 'lodash.debounce';
 import {
   DataLayoutConfig,
@@ -25,8 +17,12 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   onData,
   debounceDelay = 0,
   dependencies = [],
+  debouncedDependencies = [],
 }: DataLayoutConfig<Data>) {
-  // const initialDataLoadedRef = useRef(!!initialData);
+  // Act as a locker to ensure only one fetch function is called at one moment.
+  const isLoadingRef = useRef(false);
+
+  const initialDataLoadedRef = useRef(!!initialData);
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
   >(dataLayoutReducer, {
@@ -40,69 +36,83 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     loadingStartedAt: null,
     isPreservedData: false,
   });
-  const [debouncedDependencies, setDebouncedDependencies] = useState(
-    dependencies
-  );
-  const setDebouncedDepsRef = useRef(
-    lodashDebounce(setDebouncedDependencies, debounceDelay || 0)
-  );
 
-  const loadData = useCallback(
-    async (dependencies: DependencyList, shadow = false) => {
-      try {
-        dispatch({
-          type: 'LOAD_START',
-          payload: {
-            shadow: shadow || shadowReload,
-            preserveData: preserveDataOnError,
-          },
-        });
-        const fetchedData = await dataSource(dependencies);
-        dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
-        if (onData) {
-          onData(fetchedData);
-        }
-      } catch (err) {
-        if (onError) {
-          onError(err as Error, contextValue);
-        }
-        dispatch({
-          type: 'LOAD_FAILURE',
-          payload: { error: err, preserveData: preserveDataOnError },
-        });
+  const loadData = async (
+    dependencies: DependencyList,
+    debouncedDependencies: DependencyList,
+    shadow = false
+  ) => {
+    if (isLoadingRef.current) {
+      return;
+    }
+
+    console.log('ad');
+
+    try {
+      isLoadingRef.current = true;
+      dispatch({
+        type: 'LOAD_START',
+        payload: {
+          shadow: shadow || shadowReload,
+          preserveData: preserveDataOnError,
+        },
+      });
+
+      const fetchedData = await dataSource(dependencies, debouncedDependencies);
+
+      dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
+      isLoadingRef.current = false;
+      if (!initialDataLoadedRef.current) {
+        initialDataLoadedRef.current = true;
       }
-    },
-    [
-      dataSource,
-      dispatch,
-      onError,
-      onData,
-      state,
-      shadowReload,
-      preserveDataOnError,
-    ]
-  );
+      if (onData) {
+        onData(fetchedData);
+      }
+    } catch (err) {
+      dispatch({
+        type: 'LOAD_FAILURE',
+        payload: { error: err, preserveData: preserveDataOnError },
+      });
+      if (onError) {
+        onError(err as Error, contextValue);
+      }
+    }
+  };
 
+  const debouncedLoadDataRef = useRef(lodashDebounce(loadData, debounceDelay));
+
+  // Initial load trigger.
   useEffect(() => {
-    setDebouncedDepsRef.current(dependencies as DependencyList);
+    if (!initialDataLoadedRef.current) {
+      loadData(dependencies, debouncedDependencies);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Triggered by dependency changes
+  useEffect(() => {
+    if (initialDataLoadedRef.current) {
+      loadData(dependencies, debouncedDependencies);
+    }
   }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // useEffect(() => {
-  //   if (!initialDataLoadedRef.current) {
-  //     loadData(dependencies as DependencyList);
-  //   }
-  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+  // Triggered by debounced dependency changes
   useEffect(() => {
-    console.log('adsf');
-    loadData(dependencies as DependencyList);
-  }, [debouncedDependencies]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (initialDataLoadedRef.current) {
+      debouncedLoadDataRef.current(dependencies, debouncedDependencies);
+    }
+  }, debouncedDependencies); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Exported reload helper.
+  const reload = (options?: { shadow: boolean }) =>
+    loadData(
+      dependencies,
+      debouncedDependencies,
+      options?.shadow || shadowReload
+    );
 
   const contextValue: DataLayoutContextValue<Data> = {
     ...state,
-    reload: (options?: { shadow: boolean }) => {
-      loadData(dependencies as DependencyList, options?.shadow || shadowReload);
-    },
+    reload,
   };
 
   return contextValue;

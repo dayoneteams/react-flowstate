@@ -143,14 +143,14 @@ export default function SuperExample() {
           </Paper>
           <DataLayout
             debounceDelay={values.supportSearch ? 1000 : 0}
-            dependencies={[values.searchKeyword, values.pageNo]}
+            debouncedDependencies={[values.searchKeyword]}
+            dependencies={[values.pageNo]}
             shadowReload={values.shadowReload}
             onData={data => {
               setFieldValue('pageCount', data.pageCount);
             }}
             preserveDataOnError={values.preserveDataOnError}
-            dataSource={([searchKeyword, pageNo]) => {
-              console.log(searchKeyword, pageNo);
+            dataSource={([pageNo], [searchKeyword]) => {
               return values.throwErrorOnNextFetch
                 ? fetchError()
                 : fetchData({
