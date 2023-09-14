@@ -1,4 +1,11 @@
-import { Reducer, useEffect, useReducer, useRef, DependencyList } from 'react';
+import {
+  Reducer,
+  useEffect,
+  useReducer,
+  useRef,
+  DependencyList,
+  useMemo,
+} from 'react';
 import lodashDebounce from 'lodash.debounce';
 import {
   DataLayoutConfig,
@@ -79,7 +86,11 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
     }
   };
 
-  const debouncedLoadDataRef = useRef(lodashDebounce(loadData, debounceDelay));
+  // Debounced data fetching function.
+  const debouncedLoadDataRef = useMemo(
+    () => lodashDebounce(loadData, debounceDelay),
+    [debounceDelay]
+  );
 
   // Initial load trigger.
   useEffect(() => {
@@ -98,7 +109,7 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   // Triggered by debounced dependency changes
   useEffect(() => {
     if (initialDataLoadedRef.current) {
-      debouncedLoadDataRef.current(dependencies, debouncedDependencies);
+      debouncedLoadDataRef(dependencies, debouncedDependencies);
     }
   }, debouncedDependencies); // eslint-disable-line react-hooks/exhaustive-deps
 

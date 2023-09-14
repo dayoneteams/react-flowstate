@@ -19,6 +19,10 @@ import {
   Typography,
   Pagination,
   LinearProgress,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { DataLayout } from 'react-flowstate';
 import toastr from 'toastr';
@@ -39,6 +43,7 @@ export default function SuperExample() {
         throwErrorViaToastAlert: false,
         supportSearch: false,
         searchKeyword: '',
+        debounceDelayDuration: 1, // in seconds
         pageNo: 1,
         pageCount: 0,
         showProgressBarOnShadowLoading: false,
@@ -125,6 +130,26 @@ export default function SuperExample() {
                       label="Support search"
                     />
                   </FormGroup>
+                  {values.supportSearch && (
+                    <FormGroup>
+                      <FormControl variant="standard">
+                        <InputLabel id="debounce-delay-label">
+                          Debounce delay duration
+                        </InputLabel>
+                        <Select
+                          labelId="debounce-delay-label"
+                          value={values.debounceDelayDuration}
+                          name="debounceDelayDuration"
+                          onChange={handleChange}
+                          label="Debounce delay duration"
+                        >
+                          <MenuItem value={1}>1s</MenuItem>
+                          <MenuItem value={2}>2s</MenuItem>
+                          <MenuItem value={3}>3s</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </FormGroup>
+                  )}
                   <FormGroup>
                     <FormControlLabel
                       name="showProgressBarOnShadowLoading"
@@ -142,22 +167,22 @@ export default function SuperExample() {
             </form>
           </Paper>
           <DataLayout
-            debounceDelay={values.supportSearch ? 1000 : 0}
+            debounceDelay={
+              values.supportSearch ? values.debounceDelayDuration * 1000 : 0
+            }
             debouncedDependencies={[values.searchKeyword]}
             dependencies={[values.pageNo]}
             shadowReload={values.shadowReload}
-            onData={data => {
-              setFieldValue('pageCount', data.pageCount);
-            }}
+            onData={data => setFieldValue('pageCount', data.pageCount)}
             preserveDataOnError={values.preserveDataOnError}
-            dataSource={([pageNo], [searchKeyword]) => {
-              return values.throwErrorOnNextFetch
+            dataSource={([pageNo], [searchKeyword]) =>
+              values.throwErrorOnNextFetch
                 ? fetchError()
                 : fetchData({
                     searchKeyword: searchKeyword as string,
                     pageNo: pageNo as number,
-                  });
-            }}
+                  })
+            }
             loadingIndicator={() => (
               <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress />
@@ -203,13 +228,7 @@ export default function SuperExample() {
               </Grid>
             )}
           >
-            {({
-              data,
-              renderAutoFallback,
-              isLoadingInShadow,
-              reload,
-              isLoading,
-            }) => (
+            {({ renderAutoFallback, isLoadingInShadow, reload, isLoading }) => (
               <Box>
                 {values.showProgressBarOnShadowLoading && isLoadingInShadow && (
                   <LinearProgress />
@@ -244,7 +263,7 @@ export default function SuperExample() {
                     </Stack>
                     {renderAutoFallback()}
                     <Stack mt={2} justifyContent="flex-end" direction="row">
-                      {values.pageNo && values.pageCount && (
+                      {values.pageNo > 0 && values.pageCount > 0 && (
                         <Pagination
                           page={values.pageNo}
                           count={values.pageCount}
