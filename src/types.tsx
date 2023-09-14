@@ -25,26 +25,33 @@ export type DataLayoutState<Data> = {
   isLoading: boolean;
   isLoadingInShadow: boolean;
   error: Error | null;
-};
+} & DataLayoutComputedState<Data>;
 
 /**
  * Computed properties. These are read-only.
  */
-export interface DataLayoutComputedProps<Data> {
+export interface DataLayoutComputedState<Data> {
   /** The initial values of the layout */
-  readonly initialData: Data;
+  readonly initialData?: Data;
 
   /** Last time when data was successfully fetched, null if datasource not yet fetched */
-  readonly lastFetchSuccessAt: Date;
+  readonly dataUpdatedAt: Date | null;
+
+  /** Last time when fetching failed, null if datasource not yet failed */
+  readonly errorUpdatedAt: Date | null;
+
+  /** Last time when fetching failed, null if datasource not yet failed */
+  readonly loadingStartedAt: Date | null;
+
+  /** Equals `true` if current data is a result of data preservation */
+  readonly isPreservedData: boolean;
 }
 
 /**
  * State, handlers, and helpers for all components under <DataLayout />.
  */
-export type DataLayoutProps<Data> = DataLayoutState<Data> &
+export type DataLayoutContextValue<Data> = DataLayoutState<Data> &
   DataLayoutControlHelpers;
-
-export type DataLayoutContextType<Data> = DataLayoutProps<Data>;
 
 /**
  * <DataLayout /> props
@@ -56,21 +63,29 @@ export interface DataLayoutConfig<Data> {
    * React children or child render callback
    */
   children?:
-    | ((props: DataLayoutProps<Data>) => React.ReactNode)
+    | ((props: DataLayoutContextValue<Data>) => React.ReactNode)
     | ((
-        props: DataLayoutProps<Data> & DataLayoutRenderHelpers
+        props: DataLayoutContextValue<Data> & DataLayoutRenderHelpers
       ) => React.ReactNode)
     | React.ReactNode;
 
   /**
    * Function that fetch data
    */
-  dataSource: (deps?: DependencyList) => Promise<Data>;
+  dataSource: (
+    deps?: DependencyList,
+    debouncedDeps?: DependencyList
+  ) => Promise<Data>;
 
   /**
    * If present, dataSource is reloaded if the values in the list change.
    */
-  dependencies?: DependencyList;
+  dependencies: DependencyList;
+
+  /**
+   * If present, dataSource is reloaded if the values in the list change in a debounced behavior.
+   */
+  debouncedDependencies: DependencyList;
 
   /**
    * If present, dependency changes are debounced hence reload is debounced.
@@ -101,19 +116,25 @@ export interface DataLayoutConfig<Data> {
    * @param err
    * @param state
    */
-  onError?: (err: Error, props: DataLayoutProps<Data>) => unknown;
+  onError?: (err: Error, props: DataLayoutContextValue<Data>) => unknown;
+
+  /**
+   * Callback function on data success. Useful for showing toast or alert.
+   * @param data
+   */
+  onData?: (data: Data) => unknown;
 
   /**
    * React component to render UI displaying error
    */
   errorFallback?:
-    | ((err: Error, props: DataLayoutProps<Data>) => React.ReactNode)
+    | ((err: Error, props: DataLayoutContextValue<Data>) => React.ReactNode)
     | React.ReactNode;
 
   /**
    * UI that is only rendered when data is available
    */
   dataFallback?:
-    | ((props: DataLayoutProps<Data>) => React.ReactNode)
+    | ((props: DataLayoutContextValue<Data>) => React.ReactNode)
     | React.ReactNode;
 }

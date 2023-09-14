@@ -9,6 +9,7 @@ const LINKS = [
   { label: 'Custom children', url: '/custom-children' },
   { label: 'Layout nesting', url: '/layout-nesting' },
   { label: 'Dependencies and reload', url: '/reload-dependencies' },
+  { label: 'Super example', url: '/super-example' },
 ];
 const App = () => (
   <div className="container mx-auto p-4">

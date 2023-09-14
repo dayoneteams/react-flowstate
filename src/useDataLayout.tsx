@@ -1,68 +1,19 @@
 import {
   Reducer,
-  useCallback,
   useEffect,
   useReducer,
   useRef,
   DependencyList,
-  useState,
+  useMemo,
 } from 'react';
 import lodashDebounce from 'lodash.debounce';
 import {
   DataLayoutConfig,
-  DataLayoutContextType,
+  DataLayoutContextValue,
   DataLayoutState,
   ResponseData,
 } from './types';
-
-type DataLayoutAction<Values> =
-  | { type: 'LOAD_START'; payload: { shadow: boolean } }
-  | { type: 'LOAD_SUCCESS'; payload: Values }
-  | {
-      type: 'LOAD_FAILURE';
-      payload: { error: Error | null; preserveData: boolean };
-    };
-
-const CLEAR_ERROR = {
-  error: null,
-};
-
-const CLEAR_LOADING = {
-  isLoading: false,
-  isLoadingInShadow: false,
-};
-
-export function dataLayoutReducer<Data>(
-  state: DataLayoutState<Data>,
-  action: DataLayoutAction<Data>
-): DataLayoutState<Data> {
-  switch (action.type) {
-    case 'LOAD_START':
-      return {
-        ...state,
-        ...CLEAR_ERROR,
-        data: action.payload.shadow ? state.data : null,
-        isLoading: true,
-        isLoadingInShadow: action.payload.shadow,
-      };
-    case 'LOAD_SUCCESS':
-      return {
-        ...state,
-        ...CLEAR_LOADING,
-        ...CLEAR_ERROR,
-        data: action.payload,
-      };
-    case 'LOAD_FAILURE':
-      return {
-        ...state,
-        ...CLEAR_LOADING,
-        data: action.payload.preserveData ? state.data : null,
-        error: action.payload.error,
-      };
-    default:
-      return state;
-  }
-}
+import { DataLayoutAction, dataLayoutReducer } from './dataLayoutReducer';
 
 export function useDataLayout<Data extends ResponseData = ResponseData>({
   initialData,
@@ -70,71 +21,110 @@ export function useDataLayout<Data extends ResponseData = ResponseData>({
   shadowReload = false,
   preserveDataOnError = false,
   onError,
+  onData,
   debounceDelay = 0,
   dependencies = [],
+  debouncedDependencies = [],
 }: DataLayoutConfig<Data>) {
+  // Act as a locker to ensure only one fetch function is called at one moment.
+  const isLoadingRef = useRef(false);
+
   const initialDataLoadedRef = useRef(!!initialData);
   const [state, dispatch] = useReducer<
     Reducer<DataLayoutState<Data>, DataLayoutAction<Data>>
   >(dataLayoutReducer, {
+    initialData,
     data: initialData || null,
     error: null,
     isLoading: !initialData,
     isLoadingInShadow: !initialData && shadowReload,
+    dataUpdatedAt: null,
+    errorUpdatedAt: null,
+    loadingStartedAt: null,
+    isPreservedData: false,
   });
-  const [debouncedDependencies, setDebouncedDependencies] = useState(
-    dependencies
-  );
-  const setDebouncedDepsRef = useRef(
-    lodashDebounce(setDebouncedDependencies, debounceDelay || 0)
-  );
-  const { error, isLoading, isLoadingInShadow } = state;
 
-  const loadData = useCallback(
-    async (dependencies: DependencyList, shadow = false) => {
-      try {
-        dispatch({
-          type: 'LOAD_START',
-          payload: { shadow: shadow || shadowReload },
-        });
-        const fetchedData = await dataSource(dependencies);
-        dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
-      } catch (err) {
-        if (onError) {
-          onError(err as Error, context);
-        }
-        dispatch({
-          type: 'LOAD_FAILURE',
-          payload: { error: err, preserveData: preserveDataOnError },
-        });
+  const loadData = async (
+    dependencies: DependencyList,
+    debouncedDependencies: DependencyList,
+    shadow = false
+  ) => {
+    if (isLoadingRef.current) {
+      return;
+    }
+
+    console.log('ad');
+
+    try {
+      isLoadingRef.current = true;
+      dispatch({
+        type: 'LOAD_START',
+        payload: {
+          shadow: shadow || shadowReload,
+          preserveData: preserveDataOnError,
+        },
+      });
+
+      const fetchedData = await dataSource(dependencies, debouncedDependencies);
+
+      dispatch({ type: 'LOAD_SUCCESS', payload: fetchedData });
+      isLoadingRef.current = false;
+      if (!initialDataLoadedRef.current) {
+        initialDataLoadedRef.current = true;
       }
-    },
-    [dataSource, dispatch, onError, state, shadowReload, preserveDataOnError]
+      if (onData) {
+        onData(fetchedData);
+      }
+    } catch (err) {
+      dispatch({
+        type: 'LOAD_FAILURE',
+        payload: { error: err, preserveData: preserveDataOnError },
+      });
+      if (onError) {
+        onError(err as Error, contextValue);
+      }
+    }
+  };
+
+  // Debounced data fetching function.
+  const debouncedLoadDataRef = useMemo(
+    () => lodashDebounce(loadData, debounceDelay),
+    [debounceDelay]
   );
 
-  useEffect(() => {
-    setDebouncedDepsRef.current(dependencies as DependencyList);
-  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
-
+  // Initial load trigger.
   useEffect(() => {
     if (!initialDataLoadedRef.current) {
-      loadData(dependencies as DependencyList);
+      loadData(dependencies, debouncedDependencies);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Triggered by dependency changes
   useEffect(() => {
-    loadData(dependencies as DependencyList);
-  }, [debouncedDependencies]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (initialDataLoadedRef.current) {
+      loadData(dependencies, debouncedDependencies);
+    }
+  }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const context: DataLayoutContextType<Data> = {
-    data: state.data,
-    error,
-    isLoading,
-    isLoadingInShadow,
-    reload: (options?: { shadow: boolean }) => {
-      loadData(dependencies as DependencyList, options?.shadow || shadowReload);
-    },
+  // Triggered by debounced dependency changes
+  useEffect(() => {
+    if (initialDataLoadedRef.current) {
+      debouncedLoadDataRef(dependencies, debouncedDependencies);
+    }
+  }, debouncedDependencies); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Exported reload helper.
+  const reload = (options?: { shadow: boolean }) =>
+    loadData(
+      dependencies,
+      debouncedDependencies,
+      options?.shadow || shadowReload
+    );
+
+  const contextValue: DataLayoutContextValue<Data> = {
+    ...state,
+    reload,
   };
 
-  return context;
+  return contextValue;
 }

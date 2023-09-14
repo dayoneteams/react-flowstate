@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "Get rid of useEffect, useState for data fetching and loading indicator.",
   "author": "Hao Tang <haotang.io@gmail.com> (https://dayoneteams.com)",
+  "homepage": "https://react-flowstate.github.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/dayoneteams/react-flowstate.git"
@@ -10,6 +11,17 @@
   "bugs": {
     "url": "https://github.com/dayoneteams/react-flowstate/issues"
   },
+  "keywords": [
+    "fetch",
+    "react",
+    "react-dom",
+    "loading",
+    "render",
+    "data",
+    "render props",
+    "dynamic",
+    "layout"
+  ],
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/react-flowstate.esm.js",

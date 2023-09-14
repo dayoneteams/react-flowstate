@@ -18,42 +18,16 @@ import {
   Stack,
   Typography,
   Pagination,
+  LinearProgress,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { DataLayout } from 'react-flowstate';
-import sampleSize from 'lodash.samplesize';
 import toastr from 'toastr';
+import { fetchData } from '@/fixtures/data';
 
-const REACT_LIBS = [
-  {
-    name: 'React Router',
-    websiteUrl: 'https://reactrouter.com/',
-  },
-  {
-    name: 'Material-UI',
-    websiteUrl: 'https://mui.com/',
-  },
-  {
-    name: 'Next.js',
-    websiteUrl: 'https://nextjs.org/',
-  },
-  {
-    name: 'Redux',
-    description:
-      'A predictable state container for JavaScript apps, providing a centralized store for managing application state.',
-    websiteUrl: 'https://redux.js.org/',
-  },
-  {
-    name: 'Axios',
-    description:
-      'A library for making HTTP requests from JavaScript applications, offering a simple API for sending and receiving data from APIs.',
-    websiteUrl: 'https://axios-http.com/',
-  },
-];
-const SIZE = 2;
-const fetchSuccess = () =>
-  new Promise(resolve =>
-    setTimeout(() => resolve(sampleSize(REACT_LIBS, SIZE)), 1000)
-  );
 const fetchError = () =>
   new Promise((resolve, reject) =>
     setTimeout(() => reject(new Error('Failed to fetch data')), 1000)
@@ -69,10 +43,21 @@ export default function SuperExample() {
         throwErrorViaToastAlert: false,
         supportSearch: false,
         searchKeyword: '',
+        debounceDelayDuration: 1, // in seconds
+        pageNo: 1,
+        pageCount: 0,
+        showProgressBarOnShadowLoading: false,
       }}
     >
-      {props => (
+      {({ values, handleChange, setFieldValue }) => (
         <Stack spacing={3}>
+          <Typography variant="h4" textAlign="center">
+            Super Example
+          </Typography>
+          <Typography textAlign="center">
+            An all-in-one place for react-flowstate contributors to test all use
+            case variants.
+          </Typography>
           <Paper elevation={1} sx={{ padding: 3 }}>
             <form>
               <Grid container>
@@ -85,8 +70,8 @@ export default function SuperExample() {
                       name="shadowReload"
                       control={
                         <Checkbox
-                          onChange={props.handleChange}
-                          value={props.values.shadowReload}
+                          onChange={handleChange}
+                          value={values.shadowReload}
                         />
                       }
                       label="Shadow reload"
@@ -97,8 +82,8 @@ export default function SuperExample() {
                       name="preserveDataOnError"
                       control={
                         <Checkbox
-                          onChange={props.handleChange}
-                          value={props.values.preserveDataOnError}
+                          onChange={handleChange}
+                          value={values.preserveDataOnError}
                         />
                       }
                       label="Preserve data on error"
@@ -109,8 +94,8 @@ export default function SuperExample() {
                       name="throwErrorViaToastAlert"
                       control={
                         <Checkbox
-                          onChange={props.handleChange}
-                          value={props.values.throwErrorViaToastAlert}
+                          onChange={handleChange}
+                          value={values.throwErrorViaToastAlert}
                         />
                       }
                       label="Throw error via toast alert"
@@ -126,8 +111,8 @@ export default function SuperExample() {
                       name="throwErrorOnNextFetch"
                       control={
                         <Checkbox
-                          onChange={props.handleChange}
-                          value={props.values.throwErrorOnNextFetch}
+                          onChange={handleChange}
+                          value={values.throwErrorOnNextFetch}
                         />
                       }
                       label="Throw error on next fetch"
@@ -138,112 +123,160 @@ export default function SuperExample() {
                       name="supportSearch"
                       control={
                         <Checkbox
-                          onChange={props.handleChange}
-                          value={props.values.supportSearch}
+                          onChange={handleChange}
+                          value={values.supportSearch}
                         />
                       }
                       label="Support search"
+                    />
+                  </FormGroup>
+                  {values.supportSearch && (
+                    <FormGroup>
+                      <FormControl variant="standard">
+                        <InputLabel id="debounce-delay-label">
+                          Debounce delay duration
+                        </InputLabel>
+                        <Select
+                          labelId="debounce-delay-label"
+                          value={values.debounceDelayDuration}
+                          name="debounceDelayDuration"
+                          onChange={handleChange}
+                          label="Debounce delay duration"
+                        >
+                          <MenuItem value={1}>1s</MenuItem>
+                          <MenuItem value={2}>2s</MenuItem>
+                          <MenuItem value={3}>3s</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </FormGroup>
+                  )}
+                  <FormGroup>
+                    <FormControlLabel
+                      name="showProgressBarOnShadowLoading"
+                      control={
+                        <Checkbox
+                          onChange={handleChange}
+                          value={values.showProgressBarOnShadowLoading}
+                        />
+                      }
+                      label="Show progress bar on shadow loading"
                     />
                   </FormGroup>
                 </Grid>
               </Grid>
             </form>
           </Paper>
-          <Paper elevation={1} sx={{ padding: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              React libraries
-            </Typography>
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              sx={{ mb: 3 }}
-            >
-              {props.values.supportSearch ? (
-                <Input
-                  name="searchKeyword"
-                  onChange={props.handleChange}
-                  placeholder="react, router, ..."
-                />
-              ) : (
-                <div />
-              )}
-              <Pagination count={10} color="primary" />
-            </Grid>
-            <DataLayout
-              debounceDelay={props.values.supportSearch ? 1000 : 0}
-              dependencies={
-                props.values.supportSearch ? [props.values.searchKeyword] : []
+          <DataLayout
+            debounceDelay={
+              values.supportSearch ? values.debounceDelayDuration * 1000 : 0
+            }
+            debouncedDependencies={[values.searchKeyword]}
+            dependencies={[values.pageNo]}
+            shadowReload={values.shadowReload}
+            onData={data => setFieldValue('pageCount', data.pageCount)}
+            preserveDataOnError={values.preserveDataOnError}
+            dataSource={([pageNo], [searchKeyword]) =>
+              values.throwErrorOnNextFetch
+                ? fetchError()
+                : fetchData({
+                    searchKeyword: searchKeyword as string,
+                    pageNo: pageNo as number,
+                  })
+            }
+            loadingIndicator={() => (
+              <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+              </Box>
+            )}
+            onError={err => {
+              if (values.throwErrorViaToastAlert) {
+                toastr.error(err.message);
               }
-              shadowReload={props.values.shadowReload}
-              preserveDataOnError={props.values.preserveDataOnError}
-              dataSource={
-                props.values.throwErrorOnNextFetch ? fetchError : fetchSuccess
-              }
-              loadingIndicator={() => (
-                <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
-                  <CircularProgress />
-                </Box>
-              )}
-              onError={err => {
-                if (props.values.throwErrorViaToastAlert) {
-                  toastr.error(err.message);
-                }
-              }}
-              errorFallback={(e, { reload }) => (
-                <Alert severity="error">
-                  <AlertTitle>Error</AlertTitle>
-                  {e.message}
-                  <Button
-                    onClick={() => reload()}
-                    variant="contained"
-                    sx={{ ml: 1 }}
-                    color="error"
-                  >
-                    Try Again
-                  </Button>
-                </Alert>
-              )}
-            >
-              {({ data, reload }) => (
-                <>
-                  <Grid container spacing={2}>
-                    {data.map((jsLib, index) => (
-                      <Grid key={index} item xs={12}>
-                        <Card>
-                          <CardContent>
-                            <Typography variant="h5" component="div">
-                              {jsLib.name}
-                            </Typography>
-                          </CardContent>
-                          <CardActions>
-                            <Button href={jsLib.websiteUrl} size="small">
-                              Learn More
-                            </Button>
-                          </CardActions>
-                        </Card>
-                      </Grid>
-                    ))}
+            }}
+            errorFallback={(e, { reload }) => (
+              <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                {e.message}
+                <Button
+                  onClick={() => reload()}
+                  variant="contained"
+                  sx={{ ml: 1 }}
+                  color="error"
+                >
+                  Try Again
+                </Button>
+              </Alert>
+            )}
+            dataFallback={({ data }) => (
+              <Grid container spacing={2} mt={1}>
+                {data.items.map((jsLib, index) => (
+                  <Grid key={index} item xs={12}>
+                    <Card>
+                      <CardContent>
+                        <Typography variant="h5" component="div">
+                          {jsLib.name}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button href={jsLib.websiteUrl} size="small">
+                          Learn More
+                        </Button>
+                      </CardActions>
+                    </Card>
                   </Grid>
-                  <Stack
-                    direction="row"
-                    spacing={1}
-                    sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}
-                  >
-                    <Button onClick={() => reload()} variant="contained">
-                      Reload
-                    </Button>
-                    <Button
-                      onClick={() => reload({ shadow: true })}
-                      variant="contained"
-                    >
-                      Shadow Reload
-                    </Button>
-                  </Stack>
-                </>
-              )}
-            </DataLayout>
-          </Paper>
+                ))}
+              </Grid>
+            )}
+          >
+            {({ renderAutoFallback, isLoadingInShadow, reload, isLoading }) => (
+              <Box>
+                {values.showProgressBarOnShadowLoading && isLoadingInShadow && (
+                  <LinearProgress />
+                )}
+                <Paper elevation={1} sx={{ padding: 3 }}>
+                  <Typography variant="h6" gutterBottom>
+                    React libraries
+                  </Typography>
+                  <Box>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Box>
+                        {values.supportSearch ? (
+                          <Input
+                            value={values.searchKeyword}
+                            onChange={e => {
+                              setFieldValue('searchKeyword', e.target.value);
+                              setFieldValue('pageNo', 1);
+                            }}
+                            placeholder="react, router, ..."
+                          />
+                        ) : (
+                          <div />
+                        )}
+                      </Box>
+                      <Button
+                        onClick={() => reload()}
+                        variant="contained"
+                        disabled={isLoading}
+                      >
+                        Refresh
+                      </Button>
+                    </Stack>
+                    {renderAutoFallback()}
+                    <Stack mt={2} justifyContent="flex-end" direction="row">
+                      {values.pageNo > 0 && values.pageCount > 0 && (
+                        <Pagination
+                          page={values.pageNo}
+                          count={values.pageCount}
+                          color="primary"
+                          onChange={(e, val) => setFieldValue('pageNo', val)}
+                        />
+                      )}
+                    </Stack>
+                  </Box>
+                </Paper>
+              </Box>
+            )}
+          </DataLayout>
         </Stack>
       )}
     </Formik>
